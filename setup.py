@@ -5,7 +5,7 @@ from setuptools import setup
 _version_re = re.compile(r"__version__\s=\s'(.*)'")
 
 
-with open('socialism/__init__.py', 'r') as f:
+with open('loginpass/__init__.py', 'r') as f:
     version = _version_re.search(f.read()).group(1)
 
 
@@ -14,14 +14,14 @@ with open('README.rst') as read_me:
 
 
 setup(
-    name='socialism',
+    name='loginpass',
     version=version,
-    description='Social connects powered by Authlib for Flask and Django',
+    description='Social connections powered by Authlib for Flask and Django',
     long_description=long_description,
     url='https://authlib.org/',
     zip_safe=False,
     license='AGPLv3+',
-    packages=['socialism'],
+    packages=['loginpass'],
     install_requires=['Authlib'],
     include_package_data=True,
     classifiers=[
