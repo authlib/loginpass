@@ -1,3 +1,5 @@
+import json
+from authlib.client import AssertionSession
 from authlib.specs.rfc7519 import JWT
 from authlib.specs.oidc import CodeIDToken, UserInfo
 from ._core import OAuthBackend
@@ -32,13 +34,13 @@ class Google(OAuthBackend):
         resp = self.get('oauth2/v3/userinfo')
         return UserInfo(**resp.json())
 
-    def parse_openid(self, response, nonce=None):
+    def parse_openid(self, token, nonce=None):
         jwk_set = self.fetch_jwk_set()
-        id_token = response['id_token']
+        id_token = token['id_token']
         claims_params = dict(
             nonce=nonce,
             client_id=self.client_id,
-            access_token=response['access_token']
+            access_token=token['access_token']
         )
         jwt = JWT()
         claims = jwt.decode(
@@ -49,3 +51,30 @@ class Google(OAuthBackend):
         )
         claims.validate(leeway=120)
         return UserInfo(claims)
+
+
+class GoogleServiceAccount(AssertionSession):
+    @classmethod
+    def from_service_account_file(cls, conf_file, scope=None):
+        with open(conf_file, 'r') as f:
+            conf = json.load(f)
+
+        token_url = conf['token_uri']
+        issuer = conf['client_email']
+        key = conf['private_key']
+        key_id = conf.get('private_key_id')
+
+        header = {'alg': 'RS256'}
+        if key_id:
+            header['kid'] = key_id
+
+        # Google puts scope in payload
+        claims = {'scope': scope}
+        return cls(
+            token_url=token_url,
+            issuer=issuer,
+            audience=token_url,
+            claims=claims,
+            key=key,
+            header=header,
+        )
