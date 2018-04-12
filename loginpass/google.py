@@ -55,7 +55,7 @@ class Google(OAuthBackend):
 
 class GoogleServiceAccount(AssertionSession):
     @classmethod
-    def from_service_account_file(cls, conf_file, scope=None):
+    def from_service_account_file(cls, conf_file, scope, subject=None):
         with open(conf_file, 'r') as f:
             conf = json.load(f)
 
@@ -71,10 +71,12 @@ class GoogleServiceAccount(AssertionSession):
         # Google puts scope in payload
         claims = {'scope': scope}
         return cls(
+            grant_type=cls.JWT_BEARER_GRANT_TYPE,
             token_url=token_url,
             issuer=issuer,
             audience=token_url,
             claims=claims,
+            subject=subject,
             key=key,
             header=header,
         )
