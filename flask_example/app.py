@@ -1,13 +1,20 @@
 from flask import Flask, jsonify
 from authlib.flask.client import OAuth
 from loginpass import create_flask_blueprint
-from loginpass import Google, Facebook, Twitter, Dropbox
+from loginpass.twitter import Twitter
+from loginpass.facebook import Facebook
+from loginpass.google import Google
+from loginpass.github import GitHub
+from loginpass.dropbox import Dropbox
+from loginpass.reddit import Reddit
 
 OAUTH_BACKENDS = [
-    Google, Facebook, Twitter, Dropbox
+    Twitter, Facebook, Google, GitHub, Dropbox,
+    Reddit
 ]
 
 app = Flask(__name__)
+app.config.from_pyfile('config.py')
 oauth = OAuth(app)
 
 

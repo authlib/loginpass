@@ -1,3 +1,16 @@
+"""
+    loginpass.github
+    ~~~~~~~~~~~~~~~~
+
+    Loginpass Backend of GitHub (https://github.com).
+
+    Useful Links:
+
+    - Create App: https://github.com/settings/developers
+    - API documentation: https://developer.github.com/v3/
+"""
+
+import time
 from authlib.specs.oidc import UserInfo
 from ._core import OAuthBackend
 
@@ -24,6 +37,8 @@ class GitHub(OAuthBackend):
             'picture': data['avatar_url'],
             'website': data.get('blog'),
         }
-        # updated_at = data.get('updated_at')
-        # TODO: params['updated_at'] = updated_at
+        updated_at = data.get('updated_at')
+        if updated_at:
+            t = time.strptime(updated_at, '%Y-%m-%dT%H:%M:%SZ')
+            params['updated_at'] = int(time.mktime(t))
         return UserInfo(params)
