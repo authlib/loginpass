@@ -20,7 +20,7 @@ GOOGLE_CLAIMS_OPTIONS = {
 
 
 class Google(OAuthBackend):
-    OAUTH_TYPE = '2'
+    OAUTH_TYPE = '2.0,oidc'
     OAUTH_NAME = 'google'
     OAUTH_CONFIG = {
         'api_base_url': GOOGLE_API_URL,
