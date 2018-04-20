@@ -4,7 +4,7 @@ from ._core import OAuthBackend
 
 class Facebook(OAuthBackend):
     OAUTH_TYPE = '2.0'
-    OAUTH_NAME = 'Facebook'
+    OAUTH_NAME = 'facebook'
     OAUTH_CONFIG = {
         'api_base_url': 'https://graph.facebook.com/v2.11',
         'access_token_url': 'https://graph.facebook.com/v2.11/oauth/access_token',

@@ -1,4 +1,4 @@
-from ._core import register_to
+from ._core import register_to, create_flask_blueprint
 
-__all__ = ['register_to']
+__all__ = ['register_to', 'create_flask_blueprint']
 __version__ = '0.1.dev0'

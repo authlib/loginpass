@@ -11,7 +11,11 @@
 """
 
 from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend
+from ._core import OAuthBackend, version, homepage
+
+
+# see: https://github.com/reddit-archive/reddit/wiki/API#rules
+UA = 'web:loginpass:{} (by /u/lepture) (+{})'.format(version, homepage)
 
 
 class Reddit(OAuthBackend):
@@ -24,8 +28,19 @@ class Reddit(OAuthBackend):
         'client_kwargs': {'scope': 'identity'},
     }
 
+    DEFAULT_USER_AGENT = UA
+
     def profile(self):
         resp = self.get('me')
-        # TODO
-        params = resp.json()
+        data = resp.json()
+        profile = 'https://www.reddit.com/user/{}/'.format(data['name'])
+        params = {
+            'sub': data['id'],
+            'name': data['name'],
+            'email': data.get('email'),
+            'preferred_username': data['name'],
+            'profile': profile,
+            'picture': data['icon_img'],
+            'email_verified': data['has_verified_email'],
+        }
         return UserInfo(params)
