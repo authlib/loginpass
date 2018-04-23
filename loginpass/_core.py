@@ -54,7 +54,7 @@ def register_to(backend, oauth, client_base=None):
 
 
 def create_flask_blueprint(backend, oauth, handle_authorize):
-    from flask import Blueprint, url_for
+    from flask import Blueprint, url_for, current_app
     from authlib.flask.client import RemoteApp
 
     remote = register_to(backend, oauth, RemoteApp)
@@ -72,6 +72,8 @@ def create_flask_blueprint(backend, oauth, handle_authorize):
     @bp.route('/login')
     def login():
         redirect_uri = url_for('.auth', _external=True)
-        return remote.authorize_redirect(redirect_uri)
+        conf_key = '{}_AUTHORIZE_PARAMS'.format(backend.OAUTH_NAME.upper())
+        params = current_app.config.get(conf_key, {})
+        return remote.authorize_redirect(redirect_uri, **params)
 
     return bp
