@@ -3,12 +3,12 @@ from authlib.flask.client import OAuth
 from loginpass import create_flask_blueprint
 from loginpass import (
     Google, Twitter, Facebook, GitHub, Dropbox,
-    Reddit
+    Reddit, Gitlab
 )
 
 OAUTH_BACKENDS = [
     Twitter, Facebook, Google, GitHub, Dropbox,
-    Reddit
+    Reddit, Gitlab,
 ]
 
 app = Flask(__name__)

@@ -27,7 +27,7 @@ def create_gitlab_backend(name, hostname):
             'api_base_url': api_base_url,
             'access_token_url': token_url,
             'authorize_url': authorize_url,
-            'client_kwargs': {'scope': ''},
+            'client_kwargs': {'scope': 'read_user'},
         }
 
         def profile(self):
@@ -43,6 +43,12 @@ def create_gitlab_backend(name, hostname):
                 'website': data.get('website_url'),
             }
             return UserInfo(params)
+
+        def parse_openid(self, token, nonce=None):
+            # https://docs.gitlab.com/ee/integration/openid_connect_provider.html
+            # Although Gitlab claims that it support OIDC, the return
+            # value doesn't contains the information it claims.
+            raise NotImplementedError()
 
     return GitlabEE
 
