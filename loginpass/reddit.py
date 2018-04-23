@@ -8,10 +8,14 @@
 
     - Create App: https://www.reddit.com/prefs/apps
     - API documentation: http://www.reddit.com/dev/api
+
+    :copyright: (c) 2018 by Hsiaoming Yang
+    :license: AGPLv3+, see LICENSE for more details.
 """
 
 from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend, version, homepage
+from ._core import OAuthBackend
+from ._version import version, homepage
 
 
 # see: https://github.com/reddit-archive/reddit/wiki/API#rules

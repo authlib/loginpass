@@ -1,3 +1,18 @@
+"""
+    loginpass.dropbox
+    ~~~~~~~~~~~~~~~~~
+
+    Loginpass Backend of Dropbox (https://dropbox.com).
+
+    Useful Links:
+
+    - Create App: https://www.dropbox.com/developers/apps
+    - API documentation: https://www.dropbox.com/developers
+
+    :copyright: (c) 2018 by Hsiaoming Yang
+    :license: AGPLv3+, see LICENSE for more details.
+"""
+
 from authlib.specs.oidc import UserInfo
 from ._core import OAuthBackend
 

@@ -1,3 +1,17 @@
+"""
+    loginpass.twitter
+    ~~~~~~~~~~~~~~~~~
+
+    Loginpass Backend of Twitter (https://twitter.com).
+
+    Useful Links:
+
+    - Create App: https://apps.twitter.com/
+    - API documentation: https://developer.twitter.com/
+
+    :copyright: (c) 2018 by Hsiaoming Yang
+    :license: AGPLv3+, see LICENSE for more details.
+"""
 from authlib.specs.oidc import UserInfo
 from ._core import OAuthBackend
 

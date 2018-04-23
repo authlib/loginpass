@@ -1,3 +1,14 @@
+"""
+    loginpass.google
+    ~~~~~~~~~~~~~~~~
+
+    This module contains a loginpass backend of Google,
+    and a ServiceAccount requests Session.
+
+    :copyright: (c) 2018 by Hsiaoming Yang
+    :license: AGPLv3+, see LICENSE for more details.
+"""
+
 import json
 from authlib.client import AssertionSession
 from authlib.specs.rfc7519 import JWT

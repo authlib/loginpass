@@ -1,8 +1,5 @@
 from authlib.client import OAuthClient
 
-version = '0.1.dev'
-homepage = 'https://github.com/authlib/loginpass'
-
 
 class OAuthBackend(OAuthClient):
     """Backend for OAuth Registry"""

@@ -1,3 +1,18 @@
+"""
+    loginpass.facebook
+    ~~~~~~~~~~~~~~~~~~
+
+    Loginpass Backend of Facebook (https://facebook.com).
+
+    Useful Links:
+
+    - Create App: https://developers.facebook.com/apps
+    - API documentation: https://developers.facebook.com/docs/graph-api
+
+    :copyright: (c) 2018 by Hsiaoming Yang
+    :license: AGPLv3+, see LICENSE for more details.
+"""
+
 from authlib.specs.oidc import UserInfo
 from ._core import OAuthBackend
 
@@ -6,9 +21,9 @@ class Facebook(OAuthBackend):
     OAUTH_TYPE = '2.0'
     OAUTH_NAME = 'facebook'
     OAUTH_CONFIG = {
-        'api_base_url': 'https://graph.facebook.com/v2.11',
-        'access_token_url': 'https://graph.facebook.com/v2.11/oauth/access_token',
-        'authorize_url': 'https://www.facebook.com/v2.11/dialog/oauth',
+        'api_base_url': 'https://graph.facebook.com/v2.12',
+        'access_token_url': 'https://graph.facebook.com/v2.12/oauth/access_token',
+        'authorize_url': 'https://www.facebook.com/v2.12/dialog/oauth',
         'client_kwargs': {'scope': 'email public_profile'},
     }
 

@@ -8,6 +8,9 @@
     Useful Links:
 
     - API documentation: https://docs.gitlab.com/ee/api/
+
+    :copyright: (c) 2018 by Hsiaoming Yang
+    :license: AGPLv3+, see LICENSE for more details.
 """
 
 from authlib.specs.oidc import UserInfo
