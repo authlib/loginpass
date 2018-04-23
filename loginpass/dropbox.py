@@ -28,6 +28,7 @@ class Dropbox(OAuthBackend):
 
     def profile(self):
         resp = self.post('users/get_current_account')
+        resp.raise_for_status()
         data = resp.json()
         name_info = data['name']
         params = {

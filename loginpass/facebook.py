@@ -33,6 +33,7 @@ class Facebook(OAuthBackend):
             'first_name,middle_name,last_name,'
             'email,website,gender,locale'
         )
+        resp.raise_for_status()
         data = resp.json()
         params = {
             'sub': str(data['id']),

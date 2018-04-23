@@ -30,6 +30,7 @@ class GitHub(OAuthBackend):
 
     def profile(self):
         resp = self.get('user')
+        resp.raise_for_status()
         data = resp.json()
         params = {
             'sub': str(data['id']),

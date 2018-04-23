@@ -43,6 +43,7 @@ class Google(OAuthBackend):
 
     def profile(self):
         resp = self.get('oauth2/v3/userinfo')
+        resp.raise_for_status()
         return UserInfo(**resp.json())
 
     def parse_openid(self, token, nonce=None):

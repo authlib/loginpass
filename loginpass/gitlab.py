@@ -35,6 +35,7 @@ def create_gitlab_backend(name, hostname):
 
         def profile(self):
             resp = self.get('user')
+            resp.raise_for_status()
             data = resp.json()
             params = {
                 'sub': str(data['id']),

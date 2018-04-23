@@ -36,6 +36,7 @@ class Reddit(OAuthBackend):
 
     def profile(self):
         resp = self.get('me')
+        resp.raise_for_status()
         data = resp.json()
         profile = 'https://www.reddit.com/user/{}/'.format(data['name'])
         params = {

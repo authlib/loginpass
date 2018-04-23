@@ -48,6 +48,7 @@ class Slack(OAuthBackend):
     def profile(self):
         resp = self.get('users.identity')
         data = resp.json()
+        resp.raise_for_status()
         user = data['user']
 
         picture = None

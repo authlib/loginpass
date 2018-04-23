@@ -33,6 +33,7 @@ class Twitter(OAuthBackend):
             'include_email': True
         }
         resp = self.get(url, params=params)
+        resp.raise_for_status()
         data = resp.json()
         params = {
             'sub': data['id_str'],
