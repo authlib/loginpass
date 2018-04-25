@@ -10,6 +10,7 @@ from .reddit import Reddit
 from .gitlab import Gitlab, create_gitlab_backend
 from .slack import Slack
 from .discord import Discord
+from .bitbucket import Bitbucket
 from .stackapps import StackOverflow, create_stackapps_backend
 
 __all__ = [
@@ -17,7 +18,7 @@ __all__ = [
     'Google', 'GoogleServiceAccount', 'GitHub',
     'Facebook', 'Twitter', 'Dropbox', 'LinkedIn',
     'Reddit', 'Gitlab', 'create_gitlab_backend',
-    'Slack', 'Discord',
+    'Slack', 'Discord', 'Bitbucket',
     'StackOverflow', 'create_stackapps_backend',
 ]
 

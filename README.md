@@ -29,7 +29,8 @@ Connections that Authlib Loginpass contains:
 - [x] Discord
 - [x] Slack
 - [ ] Jira
-- [ ] Douban
+- [x] StackOverflow
+- [x] Bitbucket
 
 License
 -------

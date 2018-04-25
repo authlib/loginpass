@@ -33,3 +33,6 @@ STACKOVERFLOW_CLIENT_KWARGS = {
     'api_key': '',    # required
     'api_filter': ''  # optional
 }
+
+BITBUCKET_CLIENT_ID = ''
+BITBUCKET_CLIENT_SECRET = ''
