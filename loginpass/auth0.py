@@ -10,7 +10,7 @@
 """
 
 from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend
+from ._core import OAuthBackend, parse_id_token
 
 ALLOW_REGIONS = ['us', 'eu', 'au']
 
@@ -21,26 +21,35 @@ def create_auth0_backend(name, tenant, region=None):
     if region and region not in ALLOW_REGIONS:
         raise ValueError('Not a vaild "region"')
     if not region or region == 'us':
-        prefix = tenant
+        host = 'https://{}.auth0.com/'.format(tenant)
     else:
-        prefix = '{}.{}'.format(tenant, region)
-    api_base_url = 'https://{}.auth0.com'.format(prefix)
-    authorize_url = 'https://{}.auth0.com/authorize'.format(prefix)
-    token_url = 'https://{}.auth0.com/oauth/token'.format(prefix)
+        host = 'https://{}.{}.auth0.com/'.format(tenant, region)
+
+    authorize_url = '{}authorize'.format(host)
+    token_url = '{}oauth/token'.format(host)
 
     class Auth0(OAuthBackend):
-        OAUTH_TYPE = '2.0'
+        OAUTH_TYPE = '2.0,oidc'
         OAUTH_NAME = name
         OAUTH_CONFIG = {
-            'api_base_url': api_base_url,
+            'api_base_url': host,
             'access_token_url': token_url,
             'authorize_url': authorize_url,
-            'client_kwargs': {'scope': 'openid profile'},
+            'client_kwargs': {'scope': 'openid email profile'},
         }
+        JWK_SET_URL = '.well-known/jwks.json'.format(host)
 
         def profile(self):
             resp = self.get('userinfo')
             resp.raise_for_status()
             data = resp.json()
             return UserInfo(data)
+
+        def parse_openid(self, token, nonce=None):
+            return parse_id_token(
+                self, token['id_token'],
+                {"iss": {"values": [host]}},
+                token.get('access_token'), nonce
+            )
+
     return Auth0
