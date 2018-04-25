@@ -11,9 +11,8 @@
 
 import json
 from authlib.client import AssertionSession
-from authlib.specs.rfc7519 import JWT
-from authlib.specs.oidc import CodeIDToken, UserInfo
-from ._core import OAuthBackend
+from authlib.specs.oidc import UserInfo
+from ._core import OAuthBackend, parse_id_token
 
 
 GOOGLE_API_URL = 'https://www.googleapis.com/'
@@ -47,22 +46,10 @@ class Google(OAuthBackend):
         return UserInfo(**resp.json())
 
     def parse_openid(self, token, nonce=None):
-        jwk_set = self.fetch_jwk_set()
-        id_token = token['id_token']
-        claims_params = dict(
-            nonce=nonce,
-            client_id=self.client_id,
-            access_token=token['access_token']
+        return parse_id_token(
+            self, token['id_token'], GOOGLE_CLAIMS_OPTIONS,
+            token.get('access_token'), nonce
         )
-        jwt = JWT()
-        claims = jwt.decode(
-            id_token, key=jwk_set,
-            claims_cls=CodeIDToken,
-            claims_options=GOOGLE_CLAIMS_OPTIONS,
-            claims_params=claims_params,
-        )
-        claims.validate(leeway=120)
-        return UserInfo(claims)
 
 
 class GoogleServiceAccount(AssertionSession):
