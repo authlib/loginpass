@@ -50,7 +50,7 @@ def register_to(backend, oauth, client_base=None):
         class RemoteApp(client_base, backend):
             pass
         config['client_cls'] = RemoteApp
-    return oauth.register(backend.OAUTH_NAME, **config)
+    return oauth.register(backend.OAUTH_NAME, overwrite=True, **config)
 
 
 def create_flask_blueprint(backend, oauth, handle_authorize):
@@ -63,6 +63,7 @@ def create_flask_blueprint(backend, oauth, handle_authorize):
     @bp.route('/auth')
     def auth():
         token = remote.authorize_access_token()
+        print(token)
         if 'id_token' in token:
             user_info = remote.parse_openid(token)
         else:
@@ -90,6 +91,7 @@ def map_profile_fields(data, fields):
         a callable taking ``data`` and returning the value.
     :return: The same ``data`` dict passed in, with new keys set.
     """
+    profile = {}
     for dst, src in fields.items():
         if callable(src):
             value = src(data)
@@ -97,6 +99,6 @@ def map_profile_fields(data, fields):
             value = data.get(src)
 
         if value is not None:
-            data[dst] = value
+            profile[dst] = value
 
-    return data
+    return profile
