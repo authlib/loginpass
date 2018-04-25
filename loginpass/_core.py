@@ -77,3 +77,26 @@ def create_flask_blueprint(backend, oauth, handle_authorize):
         return remote.authorize_redirect(redirect_uri, **params)
 
     return bp
+
+
+def map_profile_fields(data, fields):
+    """Copy profile data from site-specific to standard field names.
+    Standard keys will only be set if the site data for that key is not
+    ``None``.
+
+    :param data: Profile data from the site, to be modified in place.
+    :param fields: Map of ``{destination: source}``. Destination is the
+        standard name. Source source is the site-specific name, or
+        a callable taking ``data`` and returning the value.
+    :return: The same ``data`` dict passed in, with new keys set.
+    """
+    for dst, src in fields.items():
+        if callable(src):
+            value = src(data)
+        else:
+            value = data.get(src)
+
+        if value is not None:
+            data[dst] = value
+
+    return data
