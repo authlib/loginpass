@@ -89,7 +89,7 @@ def map_profile_fields(data, fields):
     :param fields: Map of ``{destination: source}``. Destination is the
         standard name. Source source is the site-specific name, or
         a callable taking ``data`` and returning the value.
-    :return: The same ``data`` dict passed in, with new keys set.
+    :return: UserInfo fields
     """
     profile = {}
     for dst, src in fields.items():

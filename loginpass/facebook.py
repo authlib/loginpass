@@ -14,7 +14,7 @@
 """
 
 from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend
+from ._core import OAuthBackend, map_profile_fields
 
 
 class Facebook(OAuthBackend):
@@ -34,16 +34,14 @@ class Facebook(OAuthBackend):
             'email,website,gender,locale'
         )
         resp.raise_for_status()
-        data = resp.json()
-        params = {
-            'sub': str(data['id']),
-            'name': data['name'],
-            'given_name': data.get('first_name'),
-            'family_name': data.get('last_name'),
-            'middle_name': data.get('middle_name'),
-            'email': data.get('email'),
-            'website': data.get('website'),
-            'gender': data.get('gender'),
-            'locale': data.get('locale')
-        }
-        return UserInfo(params)
+        return UserInfo(map_profile_fields(resp.json(), {
+            'sub': lambda o: str(o['id']),
+            'name': 'name',
+            'given_name': 'first_name',
+            'family_name': 'last_name',
+            'middle_name': 'middle_name',
+            'email': 'email',
+            'website': 'website',
+            'gender': 'gender',
+            'locale': 'locale'
+        }))

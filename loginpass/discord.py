@@ -14,7 +14,7 @@
 """
 
 from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend
+from ._core import OAuthBackend, map_profile_fields
 from ._version import version, homepage
 
 # see: https://discordapp.com/developers/docs/reference#user-agent
@@ -39,13 +39,13 @@ class Discord(OAuthBackend):
         resp = self.get('users/%40me')
         resp.raise_for_status()
         data = resp.json()
-        params = {
-            'sub': data['id'],
-            'name': data['username'],
-            'email': data['email'],
-            'preferred_username': data['username'],
-            'email_verified': data['verified'],
-        }
+        params = map_profile_fields(data, {
+            'sub': 'id',
+            'name': 'username',
+            'email': 'email',
+            'preferred_username': 'username',
+            'email_verified': 'verified',
+        })
         if 'avatar' in data:
             src = 'https://cdn.discordapp.com/avatars/{}/{}.png'
             params['picture'] = src.format(data['id'], data['avatar'])

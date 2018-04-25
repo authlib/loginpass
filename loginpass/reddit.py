@@ -14,7 +14,7 @@
 """
 
 from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend
+from ._core import OAuthBackend, map_profile_fields
 from ._version import version, homepage
 
 
@@ -37,15 +37,16 @@ class Reddit(OAuthBackend):
     def profile(self):
         resp = self.get('me')
         resp.raise_for_status()
-        data = resp.json()
-        profile = 'https://www.reddit.com/user/{}/'.format(data['name'])
-        params = {
-            'sub': data['id'],
-            'name': data['name'],
-            'email': data.get('email'),
-            'preferred_username': data['name'],
-            'profile': profile,
-            'picture': data['icon_img'],
-            'email_verified': data['has_verified_email'],
-        }
-        return UserInfo(params)
+        return UserInfo(map_profile_fields(resp.json(), {
+            'sub': 'id',
+            'name': 'name',
+            'email': 'email',
+            'preferred_username': 'name',
+            'profile': _get_profile,
+            'picture': 'icon_img',
+            'email_verified': 'has_verified_email',
+        }))
+
+
+def _get_profile(data):
+    return 'https://www.reddit.com/user/{}/'.format(data['name'])
