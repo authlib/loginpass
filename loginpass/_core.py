@@ -1,6 +1,6 @@
 from authlib.client import OAuthClient
 from authlib.common.security import generate_token
-from authlib.specs.rfc7519 import JWT
+from authlib.specs.rfc7519 import jwt
 from authlib.specs.oidc import CodeIDToken, ImplicitIDToken, UserInfo
 
 
@@ -134,7 +134,6 @@ def parse_id_token(remote, id_token, claims_options,
         claims_cls = CodeIDToken
     else:
         claims_cls = ImplicitIDToken
-    jwt = JWT()
     claims = jwt.decode(
         id_token, key=jwk_set,
         claims_cls=claims_cls,

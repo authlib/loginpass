@@ -31,6 +31,7 @@ Connections that Authlib Loginpass contains:
 - [ ] Jira
 - [x] StackOverflow
 - [x] Bitbucket
+- [x] Auth0
 
 License
 -------
