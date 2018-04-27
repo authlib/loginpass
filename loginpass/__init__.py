@@ -12,6 +12,7 @@ from .slack import Slack
 from .discord import Discord
 from .bitbucket import Bitbucket
 from .stackapps import StackOverflow, create_stackapps_backend
+from .linkedin import LinkedIn
 
 __all__ = [
     'register_to', 'create_flask_blueprint',
@@ -20,6 +21,7 @@ __all__ = [
     'Reddit', 'Gitlab', 'create_gitlab_backend',
     'Slack', 'Discord', 'Bitbucket',
     'StackOverflow', 'create_stackapps_backend',
+    'LinkedIn',
 ]
 
 __version__ = version
