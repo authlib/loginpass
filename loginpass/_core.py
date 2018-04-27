@@ -45,6 +45,14 @@ def _get_oauth_client_cls(oauth):
 
 
 def register_to(backend, oauth, client_base=None):
+    """Register a backend to OAuth instance.
+
+    :param backend: An OAuthBackend
+    :param oauth: Authlib OAuth instance
+    :param client_base: This function will find a client_base
+        automatically, Flask or Django.
+    :return: backend instance
+    """
     if client_base is None:
         client_base = _get_oauth_client_cls(oauth)
 
@@ -57,6 +65,36 @@ def register_to(backend, oauth, client_base=None):
 
 
 def create_flask_blueprint(backend, oauth, handle_authorize):
+    """Create a Flask blueprint that you can register it directly to Flask
+    app. The blueprint contains two route: ``/auth`` and ``/login``::
+
+        from flask import Flask
+        from authlib.flask.client import OAuth
+        from loginpass import create_flask_blueprint, GitHub
+
+        app = Flask(__name__)
+        oauth = OAuth(app)
+
+
+        def handle_authorize(remote, token, user_info):
+            if token:
+                save_token(remote.name, token)
+            if user_info:
+                save_user(user_info)
+                return user_page
+            raise some_error
+
+        github_bp = create_flask_blueprint(GitHub, oauth, handle_authorize)
+        app.register_blueprint(github_bp, url_prefix='/github')
+
+        # visit /github/login
+        # callback /github/auth
+
+    :param backend: An OAuthBackend
+    :param oauth: Authlib Flask OAuth instance
+    :param handle_authorize: A function to handle authorized response
+    :return: Flask Blueprint instance
+    """
     from flask import Blueprint, request, url_for, current_app, session
     from authlib.flask.client import RemoteApp
 

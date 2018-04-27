@@ -15,6 +15,17 @@ Useful Links
 Features
 --------
 
+Authlib Loginpass contains lots of connections (see below), every connection has a
+`profile()` method which returns the same format of user info. It supports OAuth 1,
+OAuth 2 and OpenID Connect for now.
+
+The user info that `profile()` returns is standardized with [OpenID Connect UserInfo
+claims](http://openid.net/specs/openid-connect-core-1_0.html#StandardClaims),
+not something made by me.
+
+Connections
+-----------
+
 Connections that Authlib Loginpass contains:
 
 - [x] Google
@@ -24,8 +35,8 @@ Connections that Authlib Loginpass contains:
 - [x] Facebook
 - [x] Dropbox
 - [x] Reddit
-- [ ] Linkedin
-- [ ] Azure
+- [x] Linkedin
+- [x] Azure
 - [x] Discord
 - [x] Slack
 - [ ] Jira
