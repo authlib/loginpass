@@ -5,7 +5,7 @@ from setuptools import setup
 _version_re = re.compile(r"version\s=\s'(.*)'")
 
 
-with open('loginpass/_version.py', 'r') as f:
+with open('loginpass/_consts.py', 'r') as f:
     version = _version_re.search(f.read()).group(1)
 
 

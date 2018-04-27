@@ -1,5 +1,5 @@
 from ._core import register_to, create_flask_blueprint
-from ._version import version, homepage
+from ._consts import version, homepage
 from .google import Google, GoogleServiceAccount
 from .github import GitHub
 from .facebook import Facebook

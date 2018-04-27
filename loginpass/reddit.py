@@ -15,7 +15,7 @@
 
 from authlib.specs.oidc import UserInfo
 from ._core import OAuthBackend, map_profile_fields
-from ._version import version, homepage
+from ._consts import version, homepage
 
 
 # see: https://github.com/reddit-archive/reddit/wiki/API#rules
