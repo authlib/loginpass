@@ -28,8 +28,8 @@ class GitHub(OAuthBackend):
         'client_kwargs': {'scope': 'user:email'},
     }
 
-    def profile(self):
-        resp = self.get('user')
+    def profile(self, **kwargs):
+        resp = self.get('user', **kwargs)
         resp.raise_for_status()
         data = resp.json()
         params = {

@@ -99,7 +99,7 @@ def create_flask_blueprint(backend, oauth, handle_authorize):
     from authlib.flask.client import RemoteApp
 
     remote = register_to(backend, oauth, RemoteApp)
-    nonce_key = '_{}:nonce'.format(remote.OAUTH_NAME)
+    nonce_key = '_{}:nonce'.format(backend.OAUTH_NAME)
     bp = Blueprint('loginpass_' + backend.OAUTH_NAME, __name__)
 
     @bp.route('/auth')
@@ -126,13 +126,65 @@ def create_flask_blueprint(backend, oauth, handle_authorize):
         redirect_uri = url_for('.auth', _external=True)
         conf_key = '{}_AUTHORIZE_PARAMS'.format(backend.OAUTH_NAME.upper())
         params = current_app.config.get(conf_key, {})
-        if 'oidc' in remote.OAUTH_TYPE:
+        if 'oidc' in backend.OAUTH_TYPE:
             nonce = generate_token(20)
             session[nonce_key] = nonce
             params['nonce'] = nonce
         return remote.authorize_redirect(redirect_uri, **params)
 
     return bp
+
+
+def create_django_urlpatterns(backend, oauth, handle_authorize):
+    from django.conf import settings
+    from django.urls import path, reverse
+    from authlib.django.client import RemoteApp
+
+    config = getattr(settings, 'AUTHLIB_OAUTH_CLIENTS', None)
+    authorize_params = None
+    if config:
+        backend_config = config.get(backend.OAUTH_NAME)
+        if backend_config:
+            authorize_params = backend_config.get('authorize_params')
+
+    remote = register_to(backend, oauth, RemoteApp)
+    nonce_key = '_{}:nonce'.format(backend.OAUTH_NAME)
+    auth_route_name = 'loginpass_{}_auth'.format(backend.OAUTH_NAME)
+    login_route_name = 'loginpass_{}_login'.format(backend.OAUTH_NAME)
+
+    def auth(request):
+        id_token = request.GET.get('id_token')
+        if request.GET.get('code'):
+            token = remote.authorize_access_token(request)
+            if id_token:
+                token['id_token'] = id_token
+        elif id_token:
+            token = {'id_token': id_token}
+        else:
+            # handle failed
+            return handle_authorize(remote, None, None)
+        if 'id_token' in token:
+            nonce = request.session[nonce_key]
+            user_info = remote.parse_openid(token, nonce)
+        else:
+            user_info = remote.profile(token=token)
+        return handle_authorize(request, remote, token, user_info)
+
+    def login(request):
+        redirect_uri = request.build_absolute_uri(reverse(auth_route_name))
+        params = {}
+        if authorize_params:
+            params.udpate(authorize_params)
+        if 'oidc' in backend.OAUTH_TYPE:
+            nonce = generate_token(20)
+            request.session[nonce_key] = nonce
+            params['nonce'] = nonce
+        return remote.authorize_redirect(request, redirect_uri, **params)
+
+    return [
+        path('auth/', auth, name=auth_route_name),
+        path('login/', login, name=login_route_name),
+    ]
 
 
 def map_profile_fields(data, fields):

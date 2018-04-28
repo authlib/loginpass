@@ -33,8 +33,8 @@ def create_gitlab_backend(name, hostname):
             'client_kwargs': {'scope': 'read_user'},
         }
 
-        def profile(self):
-            resp = self.get('user')
+        def profile(self, **kwargs):
+            resp = self.get('user', **kwargs)
             resp.raise_for_status()
             data = resp.json()
             params = {

@@ -35,8 +35,8 @@ class Discord(OAuthBackend):
     }
     DEFAULT_USER_AGENT = UA
 
-    def profile(self):
-        resp = self.get('users/%40me')
+    def profile(self, **kwargs):
+        resp = self.get('users/%40me', **kwargs)
         resp.raise_for_status()
         data = resp.json()
         params = map_profile_fields(data, {

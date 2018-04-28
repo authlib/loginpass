@@ -27,12 +27,14 @@ class Facebook(OAuthBackend):
         'client_kwargs': {'scope': 'email public_profile'},
     }
 
-    def profile(self):
-        resp = self.get(
-            'me?fields=id,name,'
-            'first_name,middle_name,last_name,'
-            'email,website,gender,locale'
-        )
+    def profile(self, **kwargs):
+        if 'params' not in kwargs:
+            fields = [
+                'id', 'name', 'first_name', 'middle_name', 'last_name',
+                'email', 'website', 'gender', 'locale'
+            ]
+            kwargs['params'] = {'fields': ','.join(fields)}
+        resp = self.get('me', **kwargs)
         resp.raise_for_status()
         return UserInfo(map_profile_fields(resp.json(), {
             'sub': lambda o: str(o['id']),

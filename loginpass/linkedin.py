@@ -26,13 +26,13 @@ class LinkedIn(OAuthBackend):
         'client_kwargs': {'scope': 'r_basicprofile r_emailaddress'},
     }
 
-    def profile(self):
+    def profile(self, **kwargs):
         fields = [
             'id', 'email-address', 'picture-url', 'public-profile-url',
             'formatted-name', 'first-name', 'last-name', 'maiden-name',
         ]
         url = 'people/~:({})'.format(','.join(fields))
-        resp = self.get(url)
+        resp = self.get(url, **kwargs)
         resp.raise_for_status()
         return UserInfo(map_profile_fields(resp.json(), {
             'sub': 'id',

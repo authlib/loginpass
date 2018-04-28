@@ -26,13 +26,14 @@ class Twitter(OAuthBackend):
         'authorize_url': 'https://api.twitter.com/oauth/authenticate',
     }
 
-    def profile(self):
+    def profile(self, **kwargs):
         url = 'account/verify_credentials.json'
-        params = {
-            'skip_status': True,
-            'include_email': True
-        }
-        resp = self.get(url, params=params)
+        if 'params' not in kwargs:
+            kwargs['params'] = {
+                'skip_status': True,
+                'include_email': True
+            }
+        resp = self.get(url, **kwargs)
         resp.raise_for_status()
         data = resp.json()
         params = {

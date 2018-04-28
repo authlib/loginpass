@@ -63,9 +63,9 @@ def create_stackapps_backend(name, site):
         }
         # you can add api_key, api_filter in client_kwargs
 
-        def profile(self):
+        def profile(self, **kwargs):
             """Get the user's profile."""
-            resp = self.get('me')
+            resp = self.get('me', **kwargs)
             resp.raise_for_status()
             data = resp.json()
             return UserInfo(map_profile_fields(data['items'][0], {

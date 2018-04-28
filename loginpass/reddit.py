@@ -34,8 +34,8 @@ class Reddit(OAuthBackend):
 
     DEFAULT_USER_AGENT = UA
 
-    def profile(self):
-        resp = self.get('me')
+    def profile(self, **kwargs):
+        resp = self.get('me', **kwargs)
         resp.raise_for_status()
         return UserInfo(map_profile_fields(resp.json(), {
             'sub': 'id',

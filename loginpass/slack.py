@@ -45,8 +45,8 @@ class Slack(OAuthBackend):
         'compliance_fix': slack_compliance_fix
     }
 
-    def profile(self):
-        resp = self.get('users.identity')
+    def profile(self, **kwargs):
+        resp = self.get('users.identity', **kwargs)
         data = resp.json()
         resp.raise_for_status()
         user = data['user']

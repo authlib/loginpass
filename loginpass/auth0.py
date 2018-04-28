@@ -39,8 +39,8 @@ def create_auth0_backend(name, tenant, region=None):
         }
         JWK_SET_URL = '.well-known/jwks.json'.format(host)
 
-        def profile(self):
-            resp = self.get('userinfo')
+        def profile(self, **kwargs):
+            resp = self.get('userinfo', **kwargs)
             resp.raise_for_status()
             data = resp.json()
             return UserInfo(data)

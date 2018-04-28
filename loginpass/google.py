@@ -40,10 +40,10 @@ class Google(OAuthBackend):
     }
     JWK_SET_URL = GOOGLE_JWK_URL
 
-    def profile(self):
-        resp = self.get('oauth2/v3/userinfo')
+    def profile(self, **kwargs):
+        resp = self.get('oauth2/v3/userinfo', **kwargs)
         resp.raise_for_status()
-        return UserInfo(**resp.json())
+        return UserInfo(resp.json())
 
     def parse_openid(self, token, nonce=None):
         return parse_id_token(

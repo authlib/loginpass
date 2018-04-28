@@ -36,9 +36,9 @@ def create_azure_backend(name, tenant):
         }
         JWK_SET_URL = '{}{}/discovery/keys'.format(base_url, tenant)
 
-        def profile(self):
+        def profile(self, **kwargs):
             url = '{}{}/openid/userinfo'.format(base_url, tenant)
-            resp = self.get(url)
+            resp = self.get(url, **kwargs)
             resp.raise_for_status()
             return UserInfo(**resp.json())
 

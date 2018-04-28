@@ -26,8 +26,8 @@ class Dropbox(OAuthBackend):
         'authorize_url': 'https://www.dropbox.com/oauth2/authorize',
     }
 
-    def profile(self):
-        resp = self.post('users/get_current_account')
+    def profile(self, **kwargs):
+        resp = self.post('users/get_current_account', **kwargs)
         resp.raise_for_status()
         data = resp.json()
         name_info = data['name']

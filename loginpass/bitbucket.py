@@ -27,8 +27,8 @@ class Bitbucket(OAuthBackend):
         'client_kwargs': {'scope': 'email'},
     }
 
-    def profile(self):
-        resp = self.get('user')
+    def profile(self, **kwargs):
+        resp = self.get('user', **kwargs)
         resp.raise_for_status()
         params = map_profile_fields(resp.json(), {
             'sub': 'account_id',
@@ -39,7 +39,7 @@ class Bitbucket(OAuthBackend):
             'picture': _get_avatar,
             'profile': _get_profile,
         })
-        resp = self.get('user/emails')
+        resp = self.get('user/emails', **kwargs)
         resp.raise_for_status()
         params.update(_get_email(resp.json()))
         return UserInfo(params)
