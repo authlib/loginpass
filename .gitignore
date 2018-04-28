@@ -18,3 +18,4 @@ venv/
 .pytest_cache/
 *.egg
 .idea/
+*.sqlite3
