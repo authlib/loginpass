@@ -44,6 +44,15 @@ Connections that Authlib Loginpass contains:
 - [x] Bitbucket
 - [x] Auth0
 
+Usage
+-----
+
+Loginpass is just a simple wrapper around [Authlib][], it is configured apps
+ready to use with [Authlib Client Integrated Frameworks][client]. Checkout the
+examples for Flask and Django.
+
+[client]: https://docs.authlib.org/en/latest/client/frameworks.html
+
 License
 -------
 
