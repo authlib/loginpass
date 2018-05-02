@@ -1,6 +1,6 @@
 from authlib.client import OAuthClient
 from authlib.common.security import generate_token
-from authlib.specs.rfc7519 import jwt
+from authlib.specs.rfc7519 import jwt, jwk
 from authlib.specs.oidc import CodeIDToken, ImplicitIDToken, UserInfo
 
 
@@ -214,7 +214,15 @@ def map_profile_fields(data, fields):
 def parse_id_token(remote, id_token, claims_options,
                    access_token=None, nonce=None):
     """Parse UserInfo from id_token."""
-    jwk_set = remote.fetch_jwk_set()
+
+    def load_key(header, payload):
+        jwk_set = remote.fetch_jwk_set()
+        try:
+            return jwk.loads(jwk_set, header.get('kid'))
+        except ValueError:
+            jwk_set = remote.fetch_jwk_set(force=True)
+            return jwk.loads(jwk_set, header.get('kid'))
+
     claims_params = dict(
         nonce=nonce,
         client_id=remote.client_id,
@@ -225,7 +233,7 @@ def parse_id_token(remote, id_token, claims_options,
     else:
         claims_cls = ImplicitIDToken
     claims = jwt.decode(
-        id_token, key=jwk_set,
+        id_token, key=load_key,
         claims_cls=claims_cls,
         claims_options=claims_options,
         claims_params=claims_params,
