@@ -13,6 +13,7 @@ from .slack import Slack
 from .discord import Discord
 from .bitbucket import Bitbucket
 from .stackapps import StackOverflow, create_stackapps_backend
+from .strava import Strava
 
 __all__ = [
     'register_to',
@@ -23,6 +24,7 @@ __all__ = [
     'Reddit', 'Gitlab', 'create_gitlab_backend',
     'Slack', 'Discord', 'Bitbucket',
     'StackOverflow', 'create_stackapps_backend',
+    'Strava',
 ]
 
 __version__ = version
