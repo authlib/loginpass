@@ -4,13 +4,13 @@ from loginpass import create_flask_blueprint
 from loginpass import (
     Google, Twitter, Facebook, GitHub, Dropbox,
     Reddit, Gitlab, Slack, Discord, StackOverflow,
-    Bitbucket
+    Bitbucket, Strava
 )
 
 OAUTH_BACKENDS = [
     Twitter, Facebook, Google, GitHub, Dropbox,
     Reddit, Gitlab, Slack, Discord, StackOverflow,
-    Bitbucket,
+    Bitbucket, Strava
 ]
 
 app = Flask(__name__)
