@@ -1,5 +1,6 @@
 from ._core import register_to
-from ._core import create_flask_blueprint, create_django_urlpatterns
+from ._flask import create_flask_blueprint
+from ._django import create_django_urlpatterns
 from ._consts import version, homepage
 from .google import Google, GoogleServiceAccount
 from .github import GitHub
