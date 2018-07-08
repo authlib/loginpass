@@ -48,10 +48,11 @@ Usage
 -----
 
 Loginpass is just a simple wrapper around [Authlib][], it is configured apps
-ready to use with [Authlib Client Integrated Frameworks][client]. Checkout the
-examples for Flask and Django.
+ready to use with [Flask][] and [Django][]. Checkout the
+examples for details.
 
-[client]: https://docs.authlib.org/en/latest/client/frameworks.html
+[Flask]: https://docs.authlib.org/en/latest/flask/client.html
+[Django]: https://docs.authlib.org/en/latest/django/client.html
 
 License
 -------
