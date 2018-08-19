@@ -43,6 +43,9 @@ Connections that Authlib Loginpass contains:
 - [x] StackOverflow
 - [x] Bitbucket
 - [x] Auth0
+- [x] Strava
+- [x] Spotify
+
 
 Usage
 -----
