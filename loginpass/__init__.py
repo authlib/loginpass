@@ -1,5 +1,6 @@
 from ._core import register_to
-from ._core import create_flask_blueprint, create_django_urlpatterns
+from ._flask import create_flask_blueprint
+from ._django import create_django_urlpatterns
 from ._consts import version, homepage
 from .google import Google, GoogleServiceAccount
 from .github import GitHub
@@ -14,6 +15,7 @@ from .discord import Discord
 from .bitbucket import Bitbucket
 from .stackapps import StackOverflow, create_stackapps_backend
 from .strava import Strava
+from .spotify import Spotify
 
 __all__ = [
     'register_to',
@@ -24,7 +26,7 @@ __all__ = [
     'Reddit', 'Gitlab', 'create_gitlab_backend',
     'Slack', 'Discord', 'Bitbucket',
     'StackOverflow', 'create_stackapps_backend',
-    'Strava',
+    'Strava', 'Spotify'
 ]
 
 __version__ = version
