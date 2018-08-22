@@ -38,7 +38,7 @@ class LinkedIn(OAuthBackend):
             'scope': 'r_basicprofile r_emailaddress',
             'token_endpoint_auth_method': 'client_secret_post',
         },
-        'compliance_fix': lambda s: _linkedin_compliance_fix(s)
+        'compliance_fix': _linkedin_compliance_fix
     }
 
     def profile(self, **kwargs):
