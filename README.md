@@ -45,6 +45,8 @@ Connections that Authlib Loginpass contains:
 - [x] Auth0
 - [x] Strava
 - [x] Spotify
+- [x] Yandex
+- [x] Twitch
 
 
 Usage
