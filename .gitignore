@@ -19,3 +19,4 @@ venv/
 *.egg
 .idea/
 *.sqlite3
+/flask_example/myconfig.py
