@@ -17,6 +17,7 @@ from .stackapps import StackOverflow, create_stackapps_backend
 from .strava import Strava
 from .spotify import Spotify
 from .yandex import Yandex
+from .twitch import Twitch
 
 __all__ = [
     'register_to',
@@ -27,7 +28,7 @@ __all__ = [
     'Reddit', 'Gitlab', 'create_gitlab_backend',
     'Slack', 'Discord', 'Bitbucket',
     'StackOverflow', 'create_stackapps_backend',
-    'Strava', 'Spotify', 'Yandex'
+    'Strava', 'Spotify', 'Yandex', 'Twitch'
 ]
 
 __version__ = version
