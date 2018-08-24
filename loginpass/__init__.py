@@ -24,12 +24,23 @@ __all__ = [
     'register_to',
     'create_flask_blueprint',
     'create_django_urlpatterns',
-    'Google', 'GoogleServiceAccount', 'GitHub',
-    'Facebook', 'Twitter', 'Dropbox', 'LinkedIn',
-    'Reddit', 'Gitlab', 'create_gitlab_backend',
-    'Slack', 'Discord', 'Bitbucket',
+    'Google', 'GoogleServiceAccount',
+    'GitHub',
+    'Facebook',
+    'Twitter',
+    'Dropbox',
+    'LinkedIn',
+    'Reddit',
+    'Gitlab', 'create_gitlab_backend',
+    'Slack',
+    'Discord',
+    'Bitbucket',
     'StackOverflow', 'create_stackapps_backend',
-    'Strava', 'Spotify', 'Yandex', 'Twitch', 'VK'
+    'Strava',
+    'Spotify',
+    'Yandex',
+    'Twitch',
+    'VK',
 ]
 
 __version__ = version
