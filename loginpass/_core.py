@@ -66,7 +66,7 @@ def register_to(backend, oauth, client_base=None):
 def map_profile_fields(data, fields):
     """Copy profile data from site-specific to standard field names.
     Standard keys will only be set if the site data for that key is not
-    ``None``.
+    ``None`` and not empty string.
 
     :param data: Profile data from the site, to be modified in place.
     :param fields: Map of ``{destination: source}``. Destination is the
@@ -81,7 +81,7 @@ def map_profile_fields(data, fields):
         else:
             value = data.get(src)
 
-        if value is not None:
+        if value is not None and value != '':
             profile[dst] = value
 
     return profile

@@ -13,6 +13,7 @@
     :license: AGPLv3+, see LICENSE for more details.
 """
 
+import datetime
 from authlib.specs.oidc import UserInfo
 from authlib.common.urls import add_params_to_uri
 from ._core import OAuthBackend, map_profile_fields
@@ -20,7 +21,7 @@ from ._core import OAuthBackend, map_profile_fields
 
 def vk_compliance_fix(session):
     def _add_extra_info(url, headers, body):
-        params = {'v': '5.80', 'fields': 'sex,has_photo,photo_max_orig,screen_name'}
+        params = {'v': '5.80', 'fields': 'sex,bdate,has_photo,photo_max_orig,site,screen_name'}
         url = add_params_to_uri(url, params)
         return url, headers, body
 
@@ -44,24 +45,32 @@ class VK(OAuthBackend):
         'client_kwargs': {
             'token_placement': 'uri',
             'token_endpoint_auth_method': 'client_secret_post',
+            'scope': 'email'
         },
         'compliance_fix': vk_compliance_fix
     }
 
     def profile(self, **kwargs):
+        params = {}
+        email = kwargs.get('token', {}).get('email')
+        if email:
+            params['email'] = email
+
         resp = self.get('users.get', **kwargs)
         resp.raise_for_status()
         data = resp.json()
-        params = map_profile_fields(data['response'][0], {
-            'sub': 'id',
+        params.update(map_profile_fields(data['response'][0], {
+            'sub': lambda o: str(o['id']),
             'name': _get_name,
             'given_name': 'first_name',
             'family_name': 'last_name',
             'preferred_username': 'screen_name',
             'profile': _get_profile,
             'picture': _get_photo,
+            'website': 'site',
             'gender': _get_sex,
-        })
+            'birthdate': _get_bdate
+        }))
         return UserInfo(params)
 
 
@@ -85,3 +94,12 @@ def _get_sex(data):
         return 'female'
     elif sex == 2:
         return 'male'
+
+
+def _get_bdate(data):
+    bdate = data.get('bdate')
+    if bdate:
+        try:
+            return datetime.datetime.strptime(bdate, '%d.%m.%Y').strftime('%Y-%m-%d')
+        except ValueError:
+            pass
