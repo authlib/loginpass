@@ -18,6 +18,7 @@ from .strava import Strava
 from .spotify import Spotify
 from .yandex import Yandex
 from .twitch import Twitch
+from .vk import VK
 
 __all__ = [
     'register_to',
@@ -28,7 +29,7 @@ __all__ = [
     'Reddit', 'Gitlab', 'create_gitlab_backend',
     'Slack', 'Discord', 'Bitbucket',
     'StackOverflow', 'create_stackapps_backend',
-    'Strava', 'Spotify', 'Yandex', 'Twitch'
+    'Strava', 'Spotify', 'Yandex', 'Twitch', 'VK'
 ]
 
 __version__ = version

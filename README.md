@@ -47,6 +47,7 @@ Connections that Authlib Loginpass contains:
 - [x] Spotify
 - [x] Yandex
 - [x] Twitch
+- [x] VK
 
 
 Usage
