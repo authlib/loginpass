@@ -56,7 +56,7 @@ def create_flask_blueprint(backend, oauth, handle_authorize):
             nonce = session[nonce_key]
             user_info = remote.parse_openid(token, nonce)
         else:
-            user_info = remote.profile()
+            user_info = remote.profile(token=token)
         return handle_authorize(remote, token, user_info)
 
     @bp.route('/login')
