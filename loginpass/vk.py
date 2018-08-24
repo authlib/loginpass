@@ -15,23 +15,16 @@
 
 import datetime
 from authlib.specs.oidc import UserInfo
-from authlib.common.urls import add_params_to_uri
 from ._core import OAuthBackend, map_profile_fields
 
 
 def vk_compliance_fix(session):
-    def _add_extra_info(url, headers, body):
-        params = {'v': '5.80', 'fields': 'sex,bdate,has_photo,photo_max_orig,site,screen_name'}
-        url = add_params_to_uri(url, params)
-        return url, headers, body
-
     def _token_response(resp):
         token = resp.json()
         token['token_type'] = 'Bearer'
         resp.json = lambda: token
         return resp
 
-    session.register_compliance_hook('protected_request', _add_extra_info)
     session.register_compliance_hook('access_token_response', _token_response)
 
 
@@ -50,13 +43,13 @@ class VK(OAuthBackend):
         'compliance_fix': vk_compliance_fix
     }
 
-    def profile(self, **kwargs):
+    def profile(self, token=None, **kwargs):
         params = {}
-        email = kwargs.get('token', {}).get('email')
-        if email:
-            params['email'] = email
+        if token and 'email' in token:
+            params['email'] = token['email']
 
-        resp = self.get('users.get', **kwargs)
+        payload = {'v': '5.80', 'fields': 'sex,bdate,has_photo,photo_max_orig,site,screen_name'}
+        resp = self.get('users.get', params=payload, **kwargs)
         resp.raise_for_status()
         data = resp.json()
         params.update(map_profile_fields(data['response'][0], {
