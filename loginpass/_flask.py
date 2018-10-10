@@ -49,6 +49,9 @@ def create_flask_blueprint(backend, oauth, handle_authorize):
                 token['id_token'] = id_token
         elif id_token:
             token = {'id_token': id_token}
+        elif request.args.get('oauth_verifier'):
+            # OAuth 1
+            token = remote.authorize_access_token()
         else:
             # handle failed
             return handle_authorize(remote, None, None)

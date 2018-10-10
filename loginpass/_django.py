@@ -30,6 +30,9 @@ def create_auth_endpoint(remote, nonce_key, handle_authorize):
                 token['id_token'] = id_token
         elif id_token:
             token = {'id_token': id_token}
+        elif request.GET.get('oauth_verifier'):
+            # OAuth 1
+            token = remote.authorize_access_token(request)
         else:
             # handle failed
             return handle_authorize(remote, None, None)
