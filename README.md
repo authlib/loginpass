@@ -4,6 +4,13 @@ Authlib Loginpass
 Social connections powered by [Authlib][]. This library is a part of Authlib project.
 It works well with Authlib v0.7+.
 
+<a href="https://lepture.com/donate">
+<img src="https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&style=flat" />
+</a>
+<a href="https://patreon.com/lepture">
+<img src="https://img.shields.io/badge/I0-patreon-f96854.svg?maxAge=2592000&style=flat" />
+</a>
+
 [Authlib]: https://authlib.org/
 
 Useful Links
