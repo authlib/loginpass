@@ -13,8 +13,7 @@
     :license: AGPLv3+, see LICENSE for more details.
 """
 
-from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend, map_profile_fields
+from ._core import UserInfo, OAuthBackend, map_profile_fields
 
 
 class Facebook(OAuthBackend):

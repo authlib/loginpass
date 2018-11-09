@@ -14,8 +14,7 @@
 """
 
 import datetime
-from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend, map_profile_fields
+from ._core import UserInfo, OAuthBackend, map_profile_fields
 
 
 def vk_compliance_fix(session):

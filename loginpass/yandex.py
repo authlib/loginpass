@@ -13,8 +13,7 @@
     :license: AGPLv3+, see LICENSE for more details.
 """
 
-from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend, map_profile_fields
+from ._core import UserInfo, OAuthBackend, map_profile_fields
 
 
 class Yandex(OAuthBackend):
@@ -36,7 +35,7 @@ class Yandex(OAuthBackend):
             'given_name': 'first_name',
             'family_name': 'last_name',
             'preferred_username': 'login',
-            'picture': get_avatar,
+            'picture': _get_picture,
             'email': 'default_email',
             'gender': 'sex',
             'birthdate': 'birthday'
@@ -44,6 +43,7 @@ class Yandex(OAuthBackend):
         return UserInfo(params)
 
 
-def get_avatar(data):
+def _get_picture(data):
     if not data['is_avatar_empty']:
-        return 'https://avatars.yandex.net/get-yapic/{}/islands-200'.format(data['default_avatar_id'])
+        tpl = 'https://avatars.yandex.net/get-yapic/{}/islands-200'
+        return tpl.format(data['default_avatar_id'])

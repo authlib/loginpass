@@ -15,9 +15,8 @@
 """
 
 import json
-from authlib.specs.oidc import UserInfo
 from authlib.common.encoding import to_unicode
-from ._core import OAuthBackend
+from ._core import UserInfo, OAuthBackend
 
 
 def slack_compliance_fix(session):

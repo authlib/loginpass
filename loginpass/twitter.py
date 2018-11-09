@@ -12,8 +12,7 @@
     :copyright: (c) 2018 by Hsiaoming Yang
     :license: AGPLv3+, see LICENSE for more details.
 """
-from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend
+from ._core import UserInfo, OAuthBackend
 
 
 class Twitter(OAuthBackend):

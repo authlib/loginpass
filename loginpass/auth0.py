@@ -9,8 +9,7 @@
     :license: AGPLv3+, see LICENSE for more details.
 """
 
-from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend, parse_id_token
+from ._core import UserInfo, OAuthBackend, parse_id_token
 
 ALLOW_REGIONS = ['us', 'eu', 'au']
 

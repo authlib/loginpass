@@ -13,8 +13,7 @@
 """
 
 import json
-from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend, map_profile_fields
+from ._core import UserInfo, OAuthBackend, map_profile_fields
 
 
 def linkedin_compliance_fix(session):

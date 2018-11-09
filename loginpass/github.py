@@ -14,8 +14,7 @@
 """
 
 import time
-from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend
+from ._core import UserInfo, OAuthBackend
 
 
 class GitHub(OAuthBackend):

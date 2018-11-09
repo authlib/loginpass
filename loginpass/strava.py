@@ -1,5 +1,4 @@
-from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend, map_profile_fields
+from ._core import UserInfo, OAuthBackend, map_profile_fields
 
 authorize_url = 'https://www.strava.com/oauth/authorize'
 token_url = 'https://www.strava.com/oauth/token'
@@ -14,7 +13,9 @@ class Strava(OAuthBackend):
         'access_token_url': token_url,
         'authorize_url': authorize_url,
         'client_kwargs': {
-            'response_type': 'code', 'scope': 'public', 'token_endpoint_auth_method': 'client_secret_post',
+            'response_type': 'code',
+            'scope': 'public',
+            'token_endpoint_auth_method': 'client_secret_post',
         },
     }
 

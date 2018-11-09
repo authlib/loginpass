@@ -13,8 +13,7 @@
     :license: AGPLv3+, see LICENSE for more details.
 """
 
-from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend
+from ._core import UserInfo, OAuthBackend
 
 
 def create_gitlab_backend(name, hostname):

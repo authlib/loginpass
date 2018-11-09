@@ -13,9 +13,8 @@
     :license: AGPLv3+, see LICENSE for more details.
 """
 
-from authlib.specs.oidc import UserInfo
 from authlib.common.urls import add_params_to_uri, url_decode
-from ._core import OAuthBackend, map_profile_fields
+from ._core import UserInfo, OAuthBackend, map_profile_fields
 
 
 def _stackapps_compliance_fix(session, site):

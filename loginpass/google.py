@@ -11,8 +11,7 @@
 
 import json
 from authlib.client import AssertionSession
-from authlib.specs.oidc import UserInfo
-from ._core import OAuthBackend, parse_id_token
+from ._core import UserInfo, OAuthBackend, parse_id_token
 
 
 GOOGLE_API_URL = 'https://www.googleapis.com/'
