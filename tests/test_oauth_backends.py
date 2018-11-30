@@ -9,6 +9,7 @@ from loginpass import (
     GitHub,
     Yandex,
     Reddit,
+    Dropbox,
 )
 
 
@@ -63,3 +64,6 @@ class TestOAuthBackends(unittest.TestCase):
 
     def test_reddit(self):
         self.run_oauth_profile(Reddit)
+
+    def test_dropbox(self):
+        self.run_oauth_profile(Dropbox)
