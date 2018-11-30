@@ -10,6 +10,7 @@ from loginpass import (
     Yandex,
     Reddit,
     Dropbox,
+    Discord,
 )
 
 
@@ -67,3 +68,6 @@ class TestOAuthBackends(unittest.TestCase):
 
     def test_dropbox(self):
         self.run_oauth_profile(Dropbox)
+
+    def test_discord(self):
+        self.run_oauth_profile(Discord)
