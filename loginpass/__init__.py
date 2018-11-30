@@ -20,6 +20,13 @@ from .yandex import Yandex
 from .twitch import Twitch
 from .vk import VK
 
+
+OAUTH_BACKENDS = [
+    Twitter, Facebook, Google, GitHub, Dropbox,
+    Reddit, Gitlab, Slack, Discord, StackOverflow,
+    Bitbucket, Strava, Spotify, Yandex, Twitch, VK
+]
+
 __all__ = [
     'register_to',
     'create_flask_blueprint',
@@ -41,6 +48,7 @@ __all__ = [
     'Yandex',
     'Twitch',
     'VK',
+    'OAUTH_BACKENDS',
 ]
 
 __version__ = version

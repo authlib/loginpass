@@ -2,17 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from django.urls import include, path
 from authlib.django.client import OAuth
 from loginpass import create_django_urlpatterns
-from loginpass import (
-    Google, Twitter, Facebook, GitHub, Dropbox,
-    Reddit, Gitlab, Slack, Discord, StackOverflow,
-    Bitbucket
-)
-
-OAUTH_BACKENDS = [
-    Twitter, Facebook, Google, GitHub, Dropbox,
-    Reddit, Gitlab, Slack, Discord, StackOverflow,
-    Bitbucket,
-]
+from loginpass import OAUTH_BACKENDS
 
 oauth = OAuth()
 
