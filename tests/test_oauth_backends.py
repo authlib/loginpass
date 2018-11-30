@@ -8,6 +8,7 @@ from loginpass import (
     Twitter,
     GitHub,
     Yandex,
+    Reddit,
 )
 
 
@@ -59,3 +60,6 @@ class TestOAuthBackends(unittest.TestCase):
 
     def test_yandex(self):
         self.run_oauth_profile(Yandex)
+
+    def test_reddit(self):
+        self.run_oauth_profile(Reddit)

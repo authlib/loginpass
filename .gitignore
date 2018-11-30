@@ -19,3 +19,5 @@ venv/
 *.egg
 .idea/
 *.sqlite3
+
+flask_example/config.py
