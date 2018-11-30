@@ -23,3 +23,7 @@ clean-tox:
 
 docs:
 	@$(MAKE) -C docs html
+
+coverage:
+	@coverage run --source=loginpass setup.py -q nosetests
+	@coverage html

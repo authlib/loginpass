@@ -24,6 +24,8 @@ setup(
     packages=['loginpass'],
     install_requires=['Authlib'],
     include_package_data=True,
+    tests_require=['nose'],
+    test_suite='nose.collector',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
