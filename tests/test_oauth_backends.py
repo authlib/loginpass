@@ -11,6 +11,7 @@ from loginpass import (
     Reddit,
     Dropbox,
     Discord,
+    Twitch,
 )
 
 
@@ -71,3 +72,6 @@ class TestOAuthBackends(unittest.TestCase):
 
     def test_discord(self):
         self.run_oauth_profile(Discord)
+
+    def test_twitch(self):
+        self.run_oauth_profile(Twitch)
