@@ -13,7 +13,6 @@
     :license: AGPLv3+, see LICENSE for more details.
 """
 
-import time
 from ._core import UserInfo, OAuthBackend
 
 
@@ -40,8 +39,4 @@ class GitHub(OAuthBackend):
             'picture': data['avatar_url'],
             'website': data.get('blog'),
         }
-        updated_at = data.get('updated_at')
-        if updated_at:
-            t = time.strptime(updated_at, '%Y-%m-%dT%H:%M:%SZ')
-            params['updated_at'] = int(time.mktime(t))
         return UserInfo(params)
