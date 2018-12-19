@@ -1,3 +1,15 @@
+"""
+    loginpass.strava
+    ~~~~~~~~~~~~~~~~
+
+    Authenticate using `Strava <https://strava.com>`_.
+
+    Useful links:
+
+    - API documentation: https://developers.strava.com/docs/reference/
+
+    :copyright: (c) 2018 by Hsiaoming Yang
+"""
 from ._core import UserInfo, OAuthBackend, map_profile_fields
 
 authorize_url = 'https://www.strava.com/oauth/authorize'
@@ -25,14 +37,17 @@ class Strava(OAuthBackend):
         resp.raise_for_status()
         data = resp.json()
         params = map_profile_fields(data, {
-            'sub': 'id',
-            'name': 'username',
+            'name': _compose_name,
             'given_name': 'firstname',
             'family_name': 'lastname',
             'preferred_username': 'username',
-            'profile': 'profile',
-            'picture': 'profile_medium',
+            'picture': 'profile',
             'email': 'email',
             'gender': 'sex'
         })
+        params['sub'] = str(data['id'])
         return UserInfo(params)
+
+
+def _compose_name(data):
+    return ' '.join((data.get('firstname'), data.get('lastname')))

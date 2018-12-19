@@ -1,0 +1,9 @@
+{
+  "sub": "1",
+  "name": "John Smith",
+  "email": "john@example.com",
+  "picture": "http://localhost:3000/uploads/user/avatar/1/index.jpg",
+  "preferred_username": "john_smith",
+  "profile": "http://localhost:3000/john_smith",
+  "website": ""
+}

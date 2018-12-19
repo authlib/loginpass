@@ -12,6 +12,8 @@ from loginpass import (
     Dropbox,
     Discord,
     Twitch,
+    Gitlab,
+    Strava,
 )
 
 
@@ -75,3 +77,9 @@ class TestOAuthBackends(unittest.TestCase):
 
     def test_twitch(self):
         self.run_oauth_profile(Twitch)
+
+    def test_gitlab(self):
+        self.run_oauth_profile(Gitlab)
+
+    def test_strava(self):
+        self.run_oauth_profile(Strava)

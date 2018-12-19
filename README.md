@@ -8,6 +8,7 @@ It works well with Authlib v0.7+.
 
 <a href="https://lepture.com/donate"><img src="https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000" /></a>
 <a href="https://patreon.com/lepture"><img src="https://img.shields.io/badge/I0-patreon-f96854.svg?maxAge=2592000" /></a>
+<a href="https://travis-ci.org/authlib/loginpass"><img src="https://api.travis-ci.org/authlib/loginpass.svg?branch=master" alt="Build Status"></a>
 
 ```python
 from flask import Flask
@@ -80,8 +81,8 @@ Loginpass is just a simple wrapper around [Authlib][], it is configured apps
 ready to use with [Flask][] and [Django][]. Checkout the
 examples for details.
 
-[Flask]: https://docs.authlib.org/en/latest/flask/client.html
-[Django]: https://docs.authlib.org/en/latest/django/client.html
+[Flask]: https://docs.authlib.org/en/latest/client/flask.html
+[Django]: https://docs.authlib.org/en/latest/client/django.html
 
 License
 -------
