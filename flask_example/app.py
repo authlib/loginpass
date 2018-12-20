@@ -22,6 +22,9 @@ class Cache(object):
             del self._data[k]
 
 
+# Cache is used for OAuth 1 services. You MUST use a real
+# cache service like memcache/redis on production.
+# THIS IS JUST A DEMO.
 oauth = OAuth(app, Cache())
 
 
