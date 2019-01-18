@@ -1,4 +1,4 @@
-from ._core import register_to
+from ._core import register_to, OAuthBackend
 from ._flask import create_flask_blueprint
 from ._django import create_django_urlpatterns
 from ._consts import version, homepage
@@ -29,6 +29,7 @@ OAUTH_BACKENDS = [
 
 __all__ = [
     'register_to',
+    'OAuthBackend',
     'create_flask_blueprint',
     'create_django_urlpatterns',
     'Google', 'GoogleServiceAccount',
