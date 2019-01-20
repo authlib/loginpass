@@ -10,19 +10,14 @@
 
 from ._core import UserInfo, OAuthBackend, parse_id_token
 
+_BASE_URL = 'https://login.microsoftonline.com/'
 
-def create_azure_backend(name, tenant):
-    """Build Azure Active Directory OAuth Backend."""
 
-    base_url = 'https://login.microsoftonline.com/'
-    authorize_url = '{}{}/oauth2/authorize'.format(base_url, tenant)
-    token_url = '{}{}/oauth2/token'.format(base_url, tenant)
-
-    jwt_claims_options = {
-        "iss": {
-            "values": ['https://sts.windows.net/{}/'.format(tenant)]
-        }
-    }
+def _create_azure_ad_class(name,
+                           tenant,
+                           authorize_url,
+                           token_url,
+                           jwt_claims_options):
 
     class AzureAD(OAuthBackend):
         OAUTH_TYPE = '2.0,oidc'
@@ -33,10 +28,10 @@ def create_azure_backend(name, tenant):
             'authorize_url': authorize_url,
             'client_kwargs': {'scope': 'openid email profile'},
         }
-        JWK_SET_URL = '{}{}/discovery/keys'.format(base_url, tenant)
+        JWK_SET_URL = '{}{}/discovery/keys'.format(_BASE_URL, tenant)
 
         def profile(self, **kwargs):
-            url = '{}{}/openid/userinfo'.format(base_url, tenant)
+            url = '{}{}/openid/userinfo'.format(_BASE_URL, tenant)
             resp = self.get(url, **kwargs)
             resp.raise_for_status()
             return UserInfo(**resp.json())
@@ -50,4 +45,43 @@ def create_azure_backend(name, tenant):
     return AzureAD
 
 
+def create_azurev1_backend(name, tenant):
+    """Build Azure Active Directory OAuth Backend."""
+
+    authorize_url = '{}{}/oauth2/authorize'.format(_BASE_URL, tenant)
+    token_url = '{}{}/oauth2/token'.format(_BASE_URL, tenant)
+
+    jwt_claims_options = {
+        "iss": {
+            "values": ['https://sts.windows.net/{}/'.format(tenant)]
+        }
+    }
+
+    return _create_azure_ad_class(name,
+                                  tenant,
+                                  authorize_url,
+                                  token_url,
+                                  jwt_claims_options)
+
+
+def create_azurev2_backend(name, tenant):
+    """Build Azure Active Directory V2 OAuth Backend."""
+
+    authorize_url = '{}{}/oauth2/v2.0/authorize'.format(_BASE_URL, tenant)
+    token_url = '{}{}/oauth2/v2.0/token'.format(_BASE_URL, tenant)
+
+    jwt_claims_options = {
+        "iss": {
+            "values": ['{}{}/v2.0'.format(_BASE_URL, tenant)]
+        }
+    }
+
+    return _create_azure_ad_class(name,
+                                  tenant,
+                                  authorize_url,
+                                  token_url,
+                                  jwt_claims_options)
+
+
+create_azure_backend = create_azurev1_backend
 Azure = create_azure_backend('azure', 'common')
