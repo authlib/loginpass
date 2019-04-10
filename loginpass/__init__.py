@@ -2,6 +2,7 @@ from ._core import register_to
 from ._flask import create_flask_blueprint
 from ._django import create_django_urlpatterns
 from ._consts import version, homepage
+from .azure import Azure, create_azure_backend
 from .google import Google, GoogleServiceAccount
 from .github import GitHub
 from .facebook import Facebook
@@ -31,6 +32,7 @@ __all__ = [
     'register_to',
     'create_flask_blueprint',
     'create_django_urlpatterns',
+    'Azure', 'create_azure_backend',
     'Google', 'GoogleServiceAccount',
     'GitHub',
     'Facebook',
