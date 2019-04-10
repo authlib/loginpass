@@ -1,6 +1,6 @@
 from authlib.client import OAuthClient
-from authlib.specs.rfc7519 import jwt, jwk
-from authlib.specs.oidc import CodeIDToken, ImplicitIDToken, UserInfo
+from authlib.jose import jwt, jwk
+from authlib.oidc.core import CodeIDToken, ImplicitIDToken, UserInfo
 
 
 class OAuthBackend(OAuthClient):
