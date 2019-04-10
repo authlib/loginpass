@@ -9,6 +9,8 @@ It works well with Authlib v0.7+.
 <a href="https://lepture.com/donate"><img src="https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000" /></a>
 <a href="https://patreon.com/lepture"><img src="https://img.shields.io/badge/I0-patreon-f96854.svg?maxAge=2592000" /></a>
 <a href="https://travis-ci.org/authlib/loginpass"><img src="https://api.travis-ci.org/authlib/loginpass.svg?branch=master" alt="Build Status"></a>
+<a href="https://pypi.org/project/loginpass/"><img src="https://badgen.net/pypi/v/loginpass" alt="PyPI Version"></a>
+<a href="https://twitter.com/intent/follow?screen_name=authlib"><img src="https://img.shields.io/twitter/follow/authlib.svg?maxAge=3600&style=social&logo=twitter&label=Follow" alt="Follow Twitter"></a>
 
 ```python
 from flask import Flask
