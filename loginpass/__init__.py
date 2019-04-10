@@ -20,6 +20,7 @@ from .spotify import Spotify
 from .yandex import Yandex
 from .twitch import Twitch
 from .vk import VK
+from .orcid import ORCiD
 
 
 OAUTH_BACKENDS = [
@@ -50,6 +51,7 @@ __all__ = [
     'Yandex',
     'Twitch',
     'VK',
+    'ORCiD',
     'OAUTH_BACKENDS',
 ]
 
