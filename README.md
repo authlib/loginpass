@@ -87,6 +87,6 @@ examples for details.
 License
 -------
 
-Loginpass is a group member of Authlib, it is licensed under AGPLv3+.
+Loginpass is a group member of Authlib, it is licensed under BSD.
 Authlib commercial license applies to this project too, you can get
 a commercial license at [Authlib Commercial Plans](https://authlib.org/plans).
