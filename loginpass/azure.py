@@ -13,7 +13,7 @@ from ._core import UserInfo, OAuthBackend, parse_id_token
 _BASE_URL = 'https://login.microsoftonline.com/'
 
 
-def create_azure_backend(name, tenant, version=1):
+def create_azure_backend(name, tenant, version=1, claims_options=None):
     if version == 1:
         authorize_url = '{}{}/oauth2/authorize'.format(_BASE_URL, tenant)
         token_url = '{}{}/oauth2/token'.format(_BASE_URL, tenant)
@@ -25,11 +25,12 @@ def create_azure_backend(name, tenant, version=1):
     else:
         raise ValueError('Invalid version')
 
-    claims_options = {
-        "iss": {
-            "values": [issuer_url]
+    if claims_options is None:
+        claims_options = {
+            "iss": {
+                "values": [issuer_url]
+            }
         }
-    }
 
     class AzureAD(OAuthBackend):
         OAUTH_TYPE = '2.0,oidc'
