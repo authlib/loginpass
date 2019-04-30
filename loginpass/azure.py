@@ -5,7 +5,7 @@
     Loginpass Backend of Azure AD.
 
     :copyright: (c) 2018 by Hsiaoming Yang
-    :license: AGPLv3+, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 from ._core import UserInfo, OAuthBackend, parse_id_token

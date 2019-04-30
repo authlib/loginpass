@@ -10,7 +10,7 @@
     - API documentation: https://developers.facebook.com/docs/graph-api
 
     :copyright: (c) 2018 by Hsiaoming Yang
-    :license: AGPLv3+, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 from ._core import UserInfo, OAuthBackend, map_profile_fields

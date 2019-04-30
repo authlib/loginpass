@@ -10,7 +10,7 @@
     - API documentation: https://vk.com/dev/users.get
 
     :copyright: (c) 2018 by Hsiaoming Yang
-    :license: AGPLv3+, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 import datetime

@@ -10,7 +10,7 @@ st
     - Endpoint signup: https://orcid.org/developer-tools
 
     :copyright: (c) 2019 by Bryan Newbold
-    :license: AGPLv3+, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 from ._core import UserInfo, OAuthBackend, parse_id_token

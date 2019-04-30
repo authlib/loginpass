@@ -10,7 +10,7 @@
     - API documentation: https://www.dropbox.com/developers
 
     :copyright: (c) 2018 by Hsiaoming Yang
-    :license: AGPLv3+, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 from ._core import UserInfo, OAuthBackend

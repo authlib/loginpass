@@ -10,7 +10,7 @@
     - API documentation: https://api.stackexchange.com/
 
     :copyright: (c) 2018 by Hsiaoming Yang
-    :license: AGPLv3+, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 from authlib.common.urls import add_params_to_uri, url_decode

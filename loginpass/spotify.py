@@ -10,7 +10,7 @@
     - API documentation: https://developer.spotify.com/documentation/web-api/reference/
 
     :copyright: (c) 2018 by Hsiaoming Yang
-    :license: AGPLv3+, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 from ._core import UserInfo, OAuthBackend, map_profile_fields

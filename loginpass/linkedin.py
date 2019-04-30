@@ -9,7 +9,7 @@
     - API documentation: https://developer.linkedin.com/
 
     :copyright: (c) 2018 by Hsiaoming Yang
-    :license: AGPLv3+, see LICENSE for more details.
+    :license: BSD, see LICENSE for more details.
 """
 
 import json
