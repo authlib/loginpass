@@ -21,10 +21,11 @@ from .yandex import Yandex
 from .twitch import Twitch
 from .vk import VK
 from .orcid import ORCiD
+from .authlib import Authlib
 
 
 OAUTH_BACKENDS = [
-    Twitter, Facebook, Google, GitHub, Dropbox,
+    Authlib, Twitter, Facebook, Google, GitHub, Dropbox,
     Reddit, Gitlab, Slack, Discord, StackOverflow,
     Bitbucket, Strava, Spotify, Yandex, Twitch, VK
 ]
@@ -33,6 +34,7 @@ __all__ = [
     'register_to',
     'create_flask_blueprint',
     'create_django_urlpatterns',
+    'Authlib',
     'Azure', 'create_azure_backend',
     'Google', 'GoogleServiceAccount',
     'GitHub',

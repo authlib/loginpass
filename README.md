@@ -74,7 +74,34 @@ Connections that Authlib Loginpass contains:
 - [x] Yandex
 - [x] Twitch
 - [x] VK
+- [x] Authlib
 
+
+Authlib server with authlib loginpass
+-----
+
+Client creation for Authlib server
+
+Get Authlib server from here: https://github.com/authlib/example-oauth2-server/pull/46
+-  create a virtualenv (from root source folder)
+   -  virtualenv venv
+   -  source venv/bin/activate
+   -  pip3 install -r requirements.txt
+-  export AUTHLIB_INSECURE_TRANSPORT=1
+-  flask initdb
+-  flask run --host=0.0.0.0
+
+Client in auth server should be created as:
+-  Client name: whatever_you_want
+-  Client URI: http://192.168.1.xx:5000
+-  Allowed scope: profile
+-  Redirect URI: http://192.168.1.xx:8000/authlib/auth
+-  Allowed Grant Types: authorization_code
+-  Allowed Response Types: code
+-  Token Endpoint Auth Method: client secret basic
+
+After clicking submit, you will get a clientId value and a clientSecret value.  
+Copy them to ./loginpass/authlib.py
 
 Usage
 -----
@@ -85,6 +112,18 @@ examples for details.
 
 [Flask]: https://docs.authlib.org/en/latest/client/flask.html
 [Django]: https://docs.authlib.org/en/latest/client/django.html
+
+For Flask:
+-  copy flask_example/app.py to ./app.py
+-  copy flask_example/config.example.py to ./config.py
+-  create a virtualenv (from root source folder)
+   -  virtualenv venv
+   -  source venv/bin/activate
+   -  pip3 install -r requirements.txt
+-  export AUTHLIB_INSECURE_TRANSPORT=true (if using authlib server)
+-  export FLASK_APP=app.py
+-  flask run --host=0.0.0.0 --port=8000
+
 
 License
 -------
