@@ -6,6 +6,7 @@ from .azure import Azure, create_azure_backend
 from .google import Google, GoogleServiceAccount
 from .github import GitHub
 from .facebook import Facebook
+from .instagram import Instagram
 from .twitter import Twitter
 from .dropbox import Dropbox
 from .linkedin import LinkedIn
@@ -24,7 +25,7 @@ from .orcid import ORCiD
 
 
 OAUTH_BACKENDS = [
-    Twitter, Facebook, Google, GitHub, Dropbox,
+    Twitter, Facebook, Google, GitHub, Dropbox, Instagram,
     Reddit, Gitlab, Slack, Discord, StackOverflow,
     Bitbucket, Strava, Spotify, Yandex, Twitch, VK
 ]
