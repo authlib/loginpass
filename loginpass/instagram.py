@@ -41,10 +41,15 @@ class Instagram(OAuthBackend):
     }
 
     def profile(self, token=None, **kwargs):
-        payload = {'access_token': token['access_token']}
-        resp = self.get('/v1/users/self', params=payload, **kwargs)
-        resp.raise_for_status()
-        return UserInfo(map_profile_fields(resp.json()['data'], {
+        data = None
+        if token is not None:
+            data = token.get('user')
+
+        if data is None:
+            resp = self.get('/v1/users/self', **kwargs)
+            resp.raise_for_status()
+            data = resp.json()['data']
+        return UserInfo(map_profile_fields(data, {
             'sub': lambda o: str(o['id']),
             'name': 'name',
             'given_name': 'full_name',
