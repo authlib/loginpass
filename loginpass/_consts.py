@@ -1,2 +1,2 @@
-version = '0.2.1'
+version = '0.3'
 homepage = 'https://github.com/authlib/loginpass'
