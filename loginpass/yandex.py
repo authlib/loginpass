@@ -44,6 +44,6 @@ class Yandex(OAuthBackend):
 
 
 def _get_picture(data):
-    if not data['is_avatar_empty']:
+    if not data.get('is_avatar_empty', True):
         tpl = 'https://avatars.yandex.net/get-yapic/{}/islands-200'
         return tpl.format(data['default_avatar_id'])
