@@ -1,0 +1,9 @@
+{
+    "iss": "https://appleid.apple.com",
+    "sub": "001473.fe6f83bf4e490aacbafe38bd0.2039",
+    "aud": "example.client",
+    "exp": "1559605918",
+    "iat": "1559605318",
+    "email": "example.client@example.com",
+    "email_verified": true
+}

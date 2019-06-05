@@ -5,6 +5,7 @@ import unittest
 import requests
 from loginpass._core import UserInfo
 from loginpass import (
+    Apple,
     BattleNet,
     Twitter,
     GitHub,
@@ -68,6 +69,9 @@ class TestOAuthBackends(unittest.TestCase):
             rv = json.load(f)
             self.assertEqual(dict(profile), rv)
 
+    def test_apple(self):
+        with self.assertRaises(NotImplementedError) as context:
+            self.run_oauth_profile(Apple)
 
     def test_battlenet(self):
         self.run_oauth_profile(BattleNet)

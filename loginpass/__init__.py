@@ -2,6 +2,7 @@ from ._core import register_to
 from ._flask import create_flask_blueprint
 from ._django import create_django_urlpatterns
 from ._consts import version, homepage
+from .apple import Apple
 from .azure import Azure, create_azure_backend
 from .battlenet import BattleNet
 from .google import Google, GoogleServiceAccount
@@ -27,15 +28,32 @@ from .hydra import create_hydra_backend
 
 
 OAUTH_BACKENDS = [
-    BattleNet, Twitter, Facebook, Google, GitHub, Dropbox, Instagram, Reddit,
-    Gitlab, Slack, Discord, StackOverflow, Bitbucket, Strava, Spotify, Yandex,
-    Twitch, VK
+    Apple,
+    BattleNet,
+    Bitbucket,
+    Discord,
+    Dropbox,
+    Facebook,
+    GitHub,
+    Gitlab,
+    Google,
+    Instagram,
+    Reddit,
+    Slack,
+    Spotify,
+    StackOverflow,
+    Strava,
+    Twitch,
+    Twitter,
+    VK,
+    Yandex,
 ]
 
 __all__ = [
     'register_to',
     'create_flask_blueprint',
     'create_django_urlpatterns',
+    'Apple',
     'Azure', 'create_azure_backend',
     'BattleNet',
     'Google', 'GoogleServiceAccount',

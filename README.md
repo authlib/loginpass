@@ -55,6 +55,7 @@ Connections
 Connections that Authlib Loginpass contains:
 
 - [x] Battle.net
+- [x] Apple
 - [x] Google
 - [x] GitHub
 - [x] Gitlab

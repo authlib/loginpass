@@ -121,6 +121,10 @@ STATIC_URL = '/static/'
 
 # AUTHLIB CLIENTS
 AUTHLIB_OAUTH_CLIENTS = {
+    'apple': {
+        'client_id': '',
+        'client_secret': '',
+    },
     'battlenet': {
         'client_id': '',
         'client_secret': '',
