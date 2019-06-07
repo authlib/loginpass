@@ -3,6 +3,7 @@ from ._flask import create_flask_blueprint
 from ._django import create_django_urlpatterns
 from ._consts import version, homepage
 from .azure import Azure, create_azure_backend
+from .battlenet import BattleNet
 from .google import Google, GoogleServiceAccount
 from .github import GitHub
 from .facebook import Facebook
@@ -25,9 +26,9 @@ from .orcid import ORCiD
 
 
 OAUTH_BACKENDS = [
-    Twitter, Facebook, Google, GitHub, Dropbox, Instagram,
-    Reddit, Gitlab, Slack, Discord, StackOverflow,
-    Bitbucket, Strava, Spotify, Yandex, Twitch, VK
+    BattleNet, Twitter, Facebook, Google, GitHub, Dropbox, Instagram, Reddit,
+    Gitlab, Slack, Discord, StackOverflow, Bitbucket, Strava, Spotify, Yandex,
+    Twitch, VK,
 ]
 
 __all__ = [
@@ -35,6 +36,7 @@ __all__ = [
     'create_flask_blueprint',
     'create_django_urlpatterns',
     'Azure', 'create_azure_backend',
+    'BattleNet',
     'Google', 'GoogleServiceAccount',
     'GitHub',
     'Facebook',

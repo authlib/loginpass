@@ -5,6 +5,7 @@ import unittest
 import requests
 from loginpass._core import UserInfo
 from loginpass import (
+    BattleNet,
     Twitter,
     GitHub,
     Yandex,
@@ -57,6 +58,9 @@ class TestOAuthBackends(unittest.TestCase):
                 'access_token': 'a'
             }
         self.run_profile(c, token=token)
+
+    def test_battlenet(self):
+        self.run_oauth_profile(BattleNet)
 
     def test_twitter(self):
         self.run_oauth_profile(Twitter)
