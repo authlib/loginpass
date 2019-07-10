@@ -54,6 +54,7 @@ Connections
 
 Connections that Authlib Loginpass contains:
 
+- [x] Battle.net
 - [x] Google
 - [x] GitHub
 - [x] Gitlab
@@ -74,7 +75,6 @@ Connections that Authlib Loginpass contains:
 - [x] Yandex
 - [x] Twitch
 - [x] VK
-
 
 Usage
 -----
