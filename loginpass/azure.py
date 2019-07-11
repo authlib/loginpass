@@ -18,19 +18,33 @@ def create_azure_backend(name, tenant, version=1, claims_options=None):
         authorize_url = '{}{}/oauth2/authorize'.format(_BASE_URL, tenant)
         token_url = '{}{}/oauth2/token'.format(_BASE_URL, tenant)
         issuer_url = 'https://sts.windows.net/{}/'.format(tenant)
+        if claims_options is None:
+            claims_options = {
+                'iss': {
+                    'values': [issuer_url]
+                }
+            }
+
     elif version == 2:
         authorize_url = '{}{}/oauth2/v2.0/authorize'.format(_BASE_URL, tenant)
         token_url = '{}{}/oauth2/v2.0/token'.format(_BASE_URL, tenant)
         issuer_url = '{}{}/v2.0'.format(_BASE_URL, tenant)
+
+        if claims_options is None:
+
+            def validate_iss(claims, value):
+                iss = 'https://login.microsoftonline.com/{}/v2.0'.format(claims['tid'])
+                return iss == value
+
+            claims_options = {
+                'iss': {
+                    'essential': True,
+                    'validate': validate_iss,
+                }
+            }
+
     else:
         raise ValueError('Invalid version')
-
-    if claims_options is None:
-        claims_options = {
-            "iss": {
-                "values": [issuer_url]
-            }
-        }
 
     class AzureAD(OAuthBackend):
         OAUTH_TYPE = '2.0,oidc'
@@ -55,7 +69,16 @@ def create_azure_backend(name, tenant, version=1, claims_options=None):
                 token.get('access_token'), nonce
             )
 
-    return AzureAD
+    class AzureADv2(AzureAD):
+        JWK_SET_URL = '{}{}/discovery/v2.0/keys'.format(_BASE_URL, tenant)
+
+        def profile(self, **kwargs):
+            return self.parse_openid(**kwargs)
+
+    if version == 2:
+        return AzureADv2
+    else:
+        return AzureAD
 
 
 Azure = create_azure_backend('azure', 'common')
