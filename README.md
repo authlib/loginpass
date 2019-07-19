@@ -75,6 +75,7 @@ Connections that Authlib Loginpass contains:
 - [x] Yandex
 - [x] Twitch
 - [x] VK
+- [x] Box
 
 Usage
 -----
