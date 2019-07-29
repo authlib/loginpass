@@ -30,7 +30,8 @@ def create_b2access_backend(name,b2accessurl):
     B2ACCESS_AUTH_URL = '{b2accessurl}/oauth2-as/oauth2-authz'.format(b2accessurl=b2accessurl)
     B2ACCESS_USERINFO_SUFFIX='/oauth2/userinfo'
     B2ACCESS_USERINFO_URL = '{b2accessurl}/oauth2/userinfo'.format(b2accessurl=b2accessurl)
-    class B2Access(OAuthBackend):
+
+    class B2AccessAuth(OAuthBackend):
         OAUTH_TYPE = '2.0,oidc'
         OAUTH_NAME = 'b2access'
         OAUTH_CONFIG = {
@@ -50,6 +51,7 @@ def create_b2access_backend(name,b2accessurl):
                 'email': data['email'],
             }
             return UserInfo(params)
+    return B2AccessAuth
 
 B2Access = create_b2access_backend('b2access','https://b2access.eudat.eu')
 B2AccessDev = create_b2access_backend('b2access','https://unity.eudat-aai.fz-juelich.de')
