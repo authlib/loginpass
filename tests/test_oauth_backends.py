@@ -16,6 +16,7 @@ from loginpass import (
     Gitlab,
     Strava,
     ORCiD,
+    B2Access
 )
 
 
@@ -91,3 +92,6 @@ class TestOAuthBackends(unittest.TestCase):
 
     def test_orcid(self):
         self.run_oauth_profile(ORCiD)
+
+    def test_b2access(self):
+        self.run_oauth_profile(B2Access)

@@ -23,12 +23,13 @@ from .yandex import Yandex
 from .twitch import Twitch
 from .vk import VK
 from .orcid import ORCiD
+from .b2access import B2Access, B2AccessDev, create_b2access_backend
 
 
 OAUTH_BACKENDS = [
     BattleNet, Twitter, Facebook, Google, GitHub, Dropbox, Instagram, Reddit,
     Gitlab, Slack, Discord, StackOverflow, Bitbucket, Strava, Spotify, Yandex,
-    Twitch, VK,
+    Twitch, VK, B2Access
 ]
 
 __all__ = [
@@ -56,6 +57,7 @@ __all__ = [
     'VK',
     'ORCiD',
     'OAUTH_BACKENDS',
+    'B2Access','B2AccessDev','create_b2access_backend',
 ]
 
 __version__ = version
