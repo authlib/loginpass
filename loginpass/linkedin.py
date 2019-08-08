@@ -31,7 +31,7 @@ class LinkedIn(OAuthBackend):
     OAUTH_TYPE = '2.0'
     OAUTH_NAME = 'linkedin'
     OAUTH_CONFIG = {
-        'api_base_url': 'https://api.linkedin.com/v1/',
+        'api_base_url': 'https://api.linkedin.com/v2/',
         'access_token_url': 'https://www.linkedin.com/oauth/v2/accessToken',
         'authorize_url': 'https://www.linkedin.com/oauth/v2/authorization',
         'client_kwargs': {
