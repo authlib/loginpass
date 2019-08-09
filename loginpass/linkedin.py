@@ -67,7 +67,7 @@ class LinkedIn(OAuthBackend):
         def localized_key(name):
             return '{}_{}'.format(
                 name['preferredLocale']['language'],
-                name['preferred_username']['country']
+                name['preferredLocale']['country']
             )
 
         first_name_locale = localized_key(fname_data)
