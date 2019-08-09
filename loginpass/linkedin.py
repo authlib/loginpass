@@ -61,6 +61,7 @@ class LinkedIn(OAuthBackend):
         url = 'me?projection=({})'.format(','.join(fields))
         resp = self.get(url, **kwargs)
         resp.raise_for_status()
+        user_id = resp.json()['id']
         fname_data = resp.json()['firstName']
         lname_data = resp.json()['lastName']
 
@@ -74,6 +75,7 @@ class LinkedIn(OAuthBackend):
         last_name_locale = localized_key(lname_data)
 
         return {
+            'id': user_id,
             'firstName': fname_data['localized'].get(first_name_locale, ''),
             'lastName': lname_data['localized'].get(last_name_locale, '')
         }
