@@ -30,12 +30,11 @@ class TestOAuthBackends(unittest.TestCase):
         # We are only intrested in the root level files of this directory.
         (_, _, filenames) = next(os.walk(test_backend_dir))
         response_files = sorted(r for r in filenames if '_response.json' in r)
-
         for rf in response_files:
             resp = mock.MagicMock(spec=requests.Response)
             with open(os.path.join(test_backend_dir, rf), 'r') as f:
                 data = json.load(f)
-            resp.json = lambda: data
+            resp.json.return_value = data
             resp.status_code = 200
             mock_responses.append(resp)
 
