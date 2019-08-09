@@ -42,8 +42,8 @@ class LinkedIn(OAuthBackend):
     }
 
     def profile(self, **kwargs):
-        user_data = get_user_data(self, **kwargs)
-        user_email = get_user_email(self, **kwargs)
+        user_data = self.get_user_data(**kwargs)
+        user_email = self.get_user_email(**kwargs)
 
         params = {
             'sub': user_data['id'],
