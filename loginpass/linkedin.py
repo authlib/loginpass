@@ -35,27 +35,52 @@ class LinkedIn(OAuthBackend):
         'access_token_url': 'https://www.linkedin.com/oauth/v2/accessToken',
         'authorize_url': 'https://www.linkedin.com/oauth/v2/authorization',
         'client_kwargs': {
-            'scope': 'r_basicprofile r_emailaddress',
+            'scope': 'r_liteprofile r_emailaddress',
             'token_endpoint_auth_method': 'client_secret_post',
         },
         'compliance_fix': linkedin_compliance_fix
     }
 
     def profile(self, **kwargs):
-        fields = [
-            'id', 'email-address', 'picture-url', 'public-profile-url',
-            'formatted-name', 'first-name', 'last-name', 'maiden-name',
-        ]
-        url = 'people/~:({})?format=json'.format(','.join(fields))
+        user_data = get_user_data(self, **kwargs)
+        user_email = get_user_email(self, **kwargs)
+
+        params = {
+            'sub': user_data['id'],
+            'given_name': user_data['firstName'],
+            'family_name': user_data['lastName'],
+            'email': user_email,
+            'picture': 'pictureUrl',
+            'profile': 'publicProfileUrl'
+        }
+
+        return UserInfo(params)
+
+    def get_user_data(self, **kwargs):
+        fields = ['id', 'firstName', 'lastName']
+        url = 'me?projection=({})'.format(','.join(fields))
         resp = self.get(url, **kwargs)
         resp.raise_for_status()
-        return UserInfo(map_profile_fields(resp.json(), {
-            'sub': 'id',
-            'email': 'emailAddress',
-            'name': 'formattedName',
-            'given_name': 'firstName',
-            'family_name': 'lastName',
-            'middle_name': 'maidenName',
-            'picture': 'pictureUrl',
-            'profile': 'publicProfileUrl',
-        }))
+        fname_data = resp.json()['firstName']
+        lname_data = resp.json()['lastName']
+
+        def localized_key(name):
+            return '{}_{}'.format(
+                name['preferredLocale']['language'],
+                name['preferred_username']['country']
+            )
+
+        first_name_locale = localized_key(fname_data)
+        last_name_locale = localized_key(lname_data)
+
+        return {
+            'firstName': fname_data['localized'].get(first_name_locale, ''),
+            'lastName': lname_data['localized'].get(last_name_locale, '')
+        }
+
+    def get_user_email(self, **kwargs):
+        url = 'emailAddress?q=members&projection=(elements*(handle~))'
+        resp = self.get(url, **kwargs)
+        resp.raise_for_status()
+
+        return resp.json().get('handle~', {}).get('emailAddress')
