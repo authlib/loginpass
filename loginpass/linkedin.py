@@ -49,7 +49,7 @@ class LinkedIn(OAuthBackend):
             'sub': user_data['id'],
             'given_name': user_data['firstName'],
             'family_name': user_data['lastName'],
-            'email': user_email,
+            'email': user_email[0],
             'picture': 'pictureUrl',
             'profile': 'publicProfileUrl'
         }
@@ -85,4 +85,10 @@ class LinkedIn(OAuthBackend):
         resp = self.get(url, **kwargs)
         resp.raise_for_status()
 
-        return resp.json().get('handle~', {}).get('emailAddress')
+        emails = []
+        for el in resp.json().get('elements', []):
+            email = el.get('handle~', {}).get('emailAddress')
+            if email is not None:
+                emails.append(email)
+
+        return emails
