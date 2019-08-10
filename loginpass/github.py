@@ -45,7 +45,7 @@ class GitHub(OAuthBackend):
         # If that is the case we get all the users emails regardless if private or note
         # and use the one he/she has marked as `primary`
         if params.get("email") is None:
-            resp = self.get("user/emails")
+            resp = self.get("user/emails", **kwargs)
             resp.raise_for_status()
             data = resp.json()
             params["email"] = next(email["email"] for email in data if email["primary"])
