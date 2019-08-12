@@ -42,21 +42,20 @@ class LinkedIn(OAuthBackend):
     }
 
     def profile(self, **kwargs):
-        user_data = self.get_user_data(**kwargs)
+        user_name = self.get_user_name(**kwargs)
         user_email = self.get_user_email(**kwargs)
 
         params = {
-            'sub': user_data['id'],
-            'given_name': user_data['firstName'],
-            'family_name': user_data['lastName'],
+            'sub': user_name['id'],
+            'given_name': user_name['firstName'],
+            'family_name': user_name['lastName'],
+            'name': user_name['firstName'] + ' ' + user_name['lastName'],
             'email': user_email[0],
-            'picture': 'pictureUrl',
-            'profile': 'publicProfileUrl'
         }
 
         return UserInfo(params)
 
-    def get_user_data(self, **kwargs):
+    def get_user_name(self, **kwargs):
         fields = ['id', 'firstName', 'lastName']
         url = 'me?projection=({})'.format(','.join(fields))
         resp = self.get(url, **kwargs)
