@@ -1,5 +1,5 @@
 [{
-    "email": "octocat@github.com",
+    "email": "private@github.com",
     "verified": true,
     "primary": true,
     "visibility": "private"
