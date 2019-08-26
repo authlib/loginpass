@@ -48,7 +48,7 @@ class VK(OAuthBackend):
             params['email'] = token['email']
 
         payload = {'v': '5.80', 'fields': 'sex,bdate,has_photo,photo_max_orig,site,screen_name'}
-        resp = self.get('users.get', params=payload, **kwargs)
+        resp = self.get('users.get', params=payload, token=token, **kwargs)
         resp.raise_for_status()
         data = resp.json()
         params.update(map_profile_fields(data['response'][0], {
