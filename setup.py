@@ -22,7 +22,7 @@ setup(
     zip_safe=False,
     license='BSD',
     packages=['loginpass'],
-    install_requires=['Authlib>=0.11'],
+    install_requires=['Authlib>=0.11', 'requests'],
     include_package_data=True,
     tests_require=['nose', 'mock'],
     test_suite='nose.collector',

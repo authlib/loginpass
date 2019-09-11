@@ -12,8 +12,12 @@ from ._core import UserInfo, OAuthBackend, parse_id_token
 
 _BASE_URL = 'https://login.microsoftonline.com/'
 
+_NAME = 'azure'
+_TENANT_NAME = 'common'
+_OAUTH_VERSION = 1
 
-def create_azure_backend(name, tenant, version=1, claims_options=None):
+
+def create_azure_backend(name=_NAME, tenant=_TENANT_NAME, version=_OAUTH_VERSION, claims_options=None):
     if version == 1:
         authorize_url = '{}{}/oauth2/authorize'.format(_BASE_URL, tenant)
         token_url = '{}{}/oauth2/token'.format(_BASE_URL, tenant)
@@ -81,4 +85,4 @@ def create_azure_backend(name, tenant, version=1, claims_options=None):
         return AzureAD
 
 
-Azure = create_azure_backend('azure', 'common')
+Azure = create_azure_backend(name=_NAME, tenant=_TENANT_NAME, version=_OAUTH_VERSION)

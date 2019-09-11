@@ -20,6 +20,7 @@ _host = 'https://orcid.org'
 _authorize_url = '{}/oauth/authorize'.format(_host)
 _token_url = '{}/oauth/token'.format(_host)
 
+
 class ORCiD(OAuthBackend):
     OAUTH_TYPE = '2.0,oidc'
     OAUTH_NAME = 'orcid'

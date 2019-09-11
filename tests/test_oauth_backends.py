@@ -27,7 +27,7 @@ class TestOAuthBackends(unittest.TestCase):
         mock_responses = list()
         test_backend_dir = os.path.join(TEST_DIR, 'data', backend.OAUTH_NAME)
 
-        # We are only intrested in the root level files of this directory.
+        # We are only interested in the root level files of this directory.
         (_, _, filenames) = next(os.walk(test_backend_dir))
         response_files = sorted(r for r in filenames if '_response.json' in r)
         for rf in response_files:

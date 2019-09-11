@@ -18,7 +18,7 @@ def create_auth0_backend(name, tenant, region=None):
     """Create an Auth0 backend for one tenant."""
 
     if region and region not in ALLOW_REGIONS:
-        raise ValueError('Not a vaild "region"')
+        raise ValueError('Not a valid "region"')
     if not region or region == 'us':
         host = 'https://{}.auth0.com/'.format(tenant)
     else:

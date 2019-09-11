@@ -20,6 +20,7 @@ from loginpass import create_flask_blueprint, GitHub
 app = Flask(__name__)
 oauth = OAuth(app)
 
+
 def handle_authorize(remote, token, user_info):
     if token:
         save_token(remote.name, token)
@@ -27,6 +28,7 @@ def handle_authorize(remote, token, user_info):
         save_user(user_info)
         return user_page
     raise some_error
+
 
 github_bp = create_flask_blueprint(GitHub, oauth, handle_authorize)
 app.register_blueprint(github_bp, url_prefix='/github')

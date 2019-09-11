@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from authlib.flask.client import OAuth
 from loginpass import create_flask_blueprint
-from loginpass import OAUTH_BACKENDS
+from loginpass import OAUTH_BACKENDS, Azure, create_azure_backend
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -40,5 +40,30 @@ def handle_authorize(remote, token, user_info):
 
 
 for backend in OAUTH_BACKENDS:
-    bp = create_flask_blueprint(backend, oauth, handle_authorize)
+    # As the Azure tenant name, e.g. 'common', is hard-coded
+    # into the code of the 'azure.py' file, if a non-common
+    # tenant is to be specified, it'll have to be specified
+    # using the Azure values found in the config.py file.
+
+    # If this backend is an Azure backend
+    if backend.OAUTH_NAME == Azure.OAUTH_NAME:
+        # Re-initialize the Azure backend using
+        # the Azure values found in the config.py file.
+        backend = create_azure_backend(Azure.OAUTH_NAME,
+                                       app.config['AZURE_TENANT_NAME'],
+                                       app.config['AZURE_OAUTH_VERSION'])
+        # Initialize the blueprint with the re-initialized Azure backend.
+        # This line, in this context, appears to be identical to the
+        # blueprint line initialization line in the if's False branch below,
+        # but this is intentional as the claims_options parameter may
+        # need to be different for an Azure backend on a case-by-case basis
+        bp = create_flask_blueprint(backend, oauth, handle_authorize)
+    # otherwise
+    else:
+        # initialize the blueprint with the backend
+        bp = create_flask_blueprint(backend, oauth, handle_authorize)
+    # register the blueprint
     app.register_blueprint(bp, url_prefix='/{}'.format(backend.OAUTH_NAME))
+
+if __name__ == '__main__':
+    app.run(debug=True)
