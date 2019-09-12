@@ -31,31 +31,54 @@ class LinkedIn(OAuthBackend):
     OAUTH_TYPE = '2.0'
     OAUTH_NAME = 'linkedin'
     OAUTH_CONFIG = {
-        'api_base_url': 'https://api.linkedin.com/v1/',
+        'api_base_url': 'https://api.linkedin.com/v2/',
         'access_token_url': 'https://www.linkedin.com/oauth/v2/accessToken',
         'authorize_url': 'https://www.linkedin.com/oauth/v2/authorization',
         'client_kwargs': {
-            'scope': 'r_basicprofile r_emailaddress',
+            'scope': 'r_liteprofile r_emailaddress',
             'token_endpoint_auth_method': 'client_secret_post',
         },
         'compliance_fix': linkedin_compliance_fix
     }
 
     def profile(self, **kwargs):
-        fields = [
-            'id', 'email-address', 'picture-url', 'public-profile-url',
-            'formatted-name', 'first-name', 'last-name', 'maiden-name',
-        ]
-        url = 'people/~:({})?format=json'.format(','.join(fields))
+        info = self.get_user_info(**kwargs)
+        email = self.get_user_email(**kwargs)
+        if email:
+            info['email'] = email
+
+        return UserInfo(info)
+
+    def get_user_info(self, **kwargs):
+        fields = ['id', 'firstName', 'lastName']
+        url = 'me?projection=({})'.format(','.join(fields))
         resp = self.get(url, **kwargs)
         resp.raise_for_status()
-        return UserInfo(map_profile_fields(resp.json(), {
-            'sub': 'id',
-            'email': 'emailAddress',
-            'name': 'formattedName',
-            'given_name': 'firstName',
-            'family_name': 'lastName',
-            'middle_name': 'maidenName',
-            'picture': 'pictureUrl',
-            'profile': 'publicProfileUrl',
-        }))
+        data = resp.json()
+
+        given_name = get_localized_value(data['firstName'])
+        family_name = get_localized_value(data['lastName'])
+        return {
+            'sub': data['id'],
+            'given_name': given_name,
+            'family_name': family_name,
+            'name': ' '.join([given_name, family_name]),
+        }
+
+    def get_user_email(self, **kwargs):
+        url = 'emailAddress?q=members&projection=(elements*(handle~))'
+        resp = self.get(url, **kwargs)
+        resp.raise_for_status()
+        data = resp.json()
+
+        handle = data.get('handle~')
+        if handle:
+            return handle.get('emailAddress')
+
+
+def get_localized_value(name):
+    key = '{}_{}'.format(
+        name['preferredLocale']['language'],
+        name['preferredLocale']['country']
+    )
+    return name['localized'].get(key, '')
