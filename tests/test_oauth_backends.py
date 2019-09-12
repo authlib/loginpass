@@ -23,25 +23,22 @@ TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class TestOAuthBackends(unittest.TestCase):
-    def run_profile(self, backend, **kwargs):
-        filename = '{}_response.json'.format(backend.OAUTH_NAME)
-        with open(os.path.join(TEST_DIR, 'data', filename), 'r') as f:
-            resp = mock.MagicMock(spec=requests.Response)
-            data = json.load(f)
-            resp.json.return_value = data
-            resp.status_code = 200
+    def get_profile(self, backend, responses, **kwargs):
+        mock_responses = list()
+        for filename in responses:
+            with open(os.path.join(TEST_DIR, 'data', filename), 'r') as f:
+                resp = mock.MagicMock(spec=requests.Response)
+                data = json.load(f)
+                resp.json.return_value = data
+                resp.status_code = 200
+                mock_responses.append(resp)
 
-        with mock.patch('requests.sessions.Session.send') as send:
-            send.return_value = resp
+        with mock.patch('requests.sessions.Session.send', side_effect=mock_responses):
             profile = backend.profile(**kwargs)
             self.assertIsInstance(profile, UserInfo)
+            return profile
 
-        filename = '{}_result.json'.format(backend.OAUTH_NAME)
-        with open(os.path.join(TEST_DIR, 'data', filename), 'r') as f:
-            result = json.load(f)
-            self.assertEqual(dict(profile), result)
-
-    def run_oauth_profile(self, backend_cls):
+    def run_oauth_profile(self, backend_cls, responses=None, result=None):
         c = backend_cls(
             client_id='a',
             client_secret='b',
@@ -57,7 +54,18 @@ class TestOAuthBackends(unittest.TestCase):
                 'token_type': 'bearer',
                 'access_token': 'a'
             }
-        self.run_profile(c, token=token)
+
+        if responses is None:
+            responses = [c.OAUTH_NAME + '_response.json']
+
+        if result is None:
+            result = c.OAUTH_NAME + '_result.json'
+
+        profile = self.get_profile(c, responses, token=token)
+        with open(os.path.join(TEST_DIR, 'data', result), 'r') as f:
+            rv = json.load(f)
+            self.assertEqual(dict(profile), rv)
+
 
     def test_battlenet(self):
         self.run_oauth_profile(BattleNet)
@@ -67,6 +75,13 @@ class TestOAuthBackends(unittest.TestCase):
 
     def test_github(self):
         self.run_oauth_profile(GitHub)
+
+    def test_github2(self):
+        self.run_oauth_profile(
+            GitHub,
+            ['github2_response1.json', 'github2_response2.json'],
+            'github2_result.json',
+        )
 
     def test_yandex(self):
         self.run_oauth_profile(Yandex)
