@@ -17,6 +17,7 @@ from loginpass import (
     Strava,
     LinkedIn,
     ORCiD,
+    B2Access
 )
 
 
@@ -114,3 +115,6 @@ class TestOAuthBackends(unittest.TestCase):
 
     def test_orcid(self):
         self.run_oauth_profile(ORCiD)
+
+    def test_b2access(self):
+        self.run_oauth_profile(B2Access)
