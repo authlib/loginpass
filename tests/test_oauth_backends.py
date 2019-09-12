@@ -24,26 +24,20 @@ TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class TestOAuthBackends(unittest.TestCase):
     def run_profile(self, backend, **kwargs):
-        mock_responses = list()
-        test_backend_dir = os.path.join(TEST_DIR, 'data', backend.OAUTH_NAME)
-
-        # We are only intrested in the root level files of this directory.
-        (_, _, filenames) = next(os.walk(test_backend_dir))
-        response_files = sorted(r for r in filenames if '_response.json' in r)
-        for rf in response_files:
+        filename = '{}_response.json'.format(backend.OAUTH_NAME)
+        with open(os.path.join(TEST_DIR, 'data', filename), 'r') as f:
             resp = mock.MagicMock(spec=requests.Response)
-            with open(os.path.join(test_backend_dir, rf), 'r') as f:
-                data = json.load(f)
+            data = json.load(f)
             resp.json.return_value = data
             resp.status_code = 200
-            mock_responses.append(resp)
 
-        with mock.patch('requests.sessions.Session.send', side_effect=mock_responses):
+        with mock.patch('requests.sessions.Session.send') as send:
+            send.return_value = resp
             profile = backend.profile(**kwargs)
             self.assertIsInstance(profile, UserInfo)
 
-        filename = 'result.json'
-        with open(os.path.join(test_backend_dir, filename), 'r') as f:
+        filename = '{}_result.json'.format(backend.OAUTH_NAME)
+        with open(os.path.join(TEST_DIR, 'data', filename), 'r') as f:
             result = json.load(f)
             self.assertEqual(dict(profile), result)
 
