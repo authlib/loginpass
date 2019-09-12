@@ -15,6 +15,7 @@ from loginpass import (
     Twitch,
     Gitlab,
     Strava,
+    LinkedIn,
     ORCiD,
 )
 
@@ -103,6 +104,13 @@ class TestOAuthBackends(unittest.TestCase):
 
     def test_strava(self):
         self.run_oauth_profile(Strava)
+
+    def test_linkedin(self):
+        self.run_oauth_profile(
+            LinkedIn,
+            ['linkedin_response1.json', 'linkedin_response2.json'],
+            'linkedin_result.json',
+        )
 
     def test_orcid(self):
         self.run_oauth_profile(ORCiD)

@@ -42,52 +42,43 @@ class LinkedIn(OAuthBackend):
     }
 
     def profile(self, **kwargs):
-        user_name = self.get_user_name(**kwargs)
-        user_email = self.get_user_email(**kwargs)
+        info = self.get_user_info(**kwargs)
+        email = self.get_user_email(**kwargs)
+        if email:
+            info['email'] = email
 
-        params = {
-            'sub': user_name['id'],
-            'given_name': user_name['firstName'],
-            'family_name': user_name['lastName'],
-            'name': user_name['firstName'] + ' ' + user_name['lastName'],
-            'email': user_email[0],
-        }
+        return UserInfo(info)
 
-        return UserInfo(params)
-
-    def get_user_name(self, **kwargs):
+    def get_user_info(self, **kwargs):
         fields = ['id', 'firstName', 'lastName']
         url = 'me?projection=({})'.format(','.join(fields))
         resp = self.get(url, **kwargs)
         resp.raise_for_status()
-        user_id = resp.json()['id']
-        fname_data = resp.json()['firstName']
-        lname_data = resp.json()['lastName']
+        data = resp.json()
 
-        def localized_key(name):
-            return '{}_{}'.format(
-                name['preferredLocale']['language'],
-                name['preferredLocale']['country']
-            )
-
-        first_name_locale = localized_key(fname_data)
-        last_name_locale = localized_key(lname_data)
-
+        given_name = get_localized_value(data['firstName'])
+        family_name = get_localized_value(data['lastName'])
         return {
-            'id': user_id,
-            'firstName': fname_data['localized'].get(first_name_locale, ''),
-            'lastName': lname_data['localized'].get(last_name_locale, '')
+            'sub': data['id'],
+            'given_name': given_name,
+            'family_name': family_name,
+            'name': ' '.join([given_name, family_name]),
         }
 
     def get_user_email(self, **kwargs):
         url = 'emailAddress?q=members&projection=(elements*(handle~))'
         resp = self.get(url, **kwargs)
         resp.raise_for_status()
+        data = resp.json()
 
-        emails = []
-        for el in resp.json().get('elements', []):
-            email = el.get('handle~', {}).get('emailAddress')
-            if email is not None:
-                emails.append(email)
+        handle = data.get('handle~')
+        if handle:
+            return handle.get('emailAddress')
 
-        return emails
+
+def get_localized_value(name):
+    key = '{}_{}'.format(
+        name['preferredLocale']['language'],
+        name['preferredLocale']['country']
+    )
+    return name['localized'].get(key, '')
