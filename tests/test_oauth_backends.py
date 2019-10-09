@@ -117,5 +117,5 @@ class TestOAuthBackends(unittest.TestCase):
         self.run_oauth_profile(ORCiD)
 
     def test_hydra(self):
-        hydra = create_hydra_backend('Hydra', 'localhost')
+        hydra = create_hydra_backend('hydra', 'localhost')
         self.run_oauth_profile(hydra)
