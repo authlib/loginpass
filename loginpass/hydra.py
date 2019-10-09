@@ -40,11 +40,8 @@ def create_hydra_backend(name, hostname):
                     "sub": data['sub']
                 }
             else:
-                params = {k:data[k] for k in kwargs.get('param_keys')}
+                params = {k: data[k] for k in kwargs.get('param_keys')}
 
             return UserInfo(params)
 
     return Hydra
-
-
-Hydra = create_hydra_backend('hydra', 'hostname')
