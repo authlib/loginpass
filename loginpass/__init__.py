@@ -29,7 +29,7 @@ from .hydra import create_hydra_backend
 OAUTH_BACKENDS = [
     BattleNet, Twitter, Facebook, Google, GitHub, Dropbox, Instagram, Reddit,
     Gitlab, Slack, Discord, StackOverflow, Bitbucket, Strava, Spotify, Yandex,
-    Twitch, VK, Hydra
+    Twitch, VK
 ]
 
 __all__ = [

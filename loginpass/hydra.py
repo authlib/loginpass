@@ -22,7 +22,7 @@ def create_hydra_backend(name, hostname):
     token_url = 'https://{hostname}/oauth2/token'.format(hostname=hostname)
 
     class Hydra(OAuthBackend):
-        OAUTH_TYPE = '2.0'
+        OAUTH_TYPE = '2.0,oidc'
         OAUTH_NAME = name
         OAUTH_CONFIG = {
             'api_base_url': api_base_url,
@@ -36,9 +36,7 @@ def create_hydra_backend(name, hostname):
             resp.raise_for_status()
             data = resp.json()
             if not kwargs.get('param_keys'):
-                params = {
-                    "sub": data['sub']
-                }
+                params = data
             else:
                 params = {k: data[k] for k in kwargs.get('param_keys')}
 
