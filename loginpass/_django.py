@@ -23,14 +23,21 @@ def create_django_urlpatterns(backend, oauth, handle_authorize):
 def create_auth_endpoint(remote, nonce_key, handle_authorize):
 
     def auth(request):
-        id_token = request.GET.get('id_token')
-        if request.GET.get('code'):
+        from django.http import HttpResponse
+
+        if request.method not in ('GET', 'POST'):
+            return HttpResponse(status=405)
+
+        method = getattr(request, request.method)
+
+        id_token = method.get('id_token')
+        if method.get('code'):
             token = remote.authorize_access_token(request)
             if id_token:
                 token['id_token'] = id_token
         elif id_token:
             token = {'id_token': id_token}
-        elif request.GET.get('oauth_verifier'):
+        elif method.get('oauth_verifier'):
             # OAuth 1
             token = remote.authorize_access_token(request)
         else:

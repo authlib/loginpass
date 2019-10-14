@@ -40,16 +40,16 @@ def create_flask_blueprint(backend, oauth, handle_authorize):
     nonce_key = '_{}:nonce'.format(backend.OAUTH_NAME)
     bp = Blueprint('loginpass_' + backend.OAUTH_NAME, __name__)
 
-    @bp.route('/auth')
+    @bp.route('/auth', methods=('GET', 'POST'))
     def auth():
-        id_token = request.args.get('id_token')
-        if request.args.get('code'):
+        id_token = request.values.get('id_token')
+        if request.values.get('code'):
             token = remote.authorize_access_token()
             if id_token:
                 token['id_token'] = id_token
         elif id_token:
             token = {'id_token': id_token}
-        elif request.args.get('oauth_verifier'):
+        elif request.values.get('oauth_verifier'):
             # OAuth 1
             token = remote.authorize_access_token()
         else:
