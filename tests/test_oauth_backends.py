@@ -17,6 +17,7 @@ from loginpass import (
     Strava,
     LinkedIn,
     ORCiD,
+    create_hydra_backend
 )
 
 
@@ -114,3 +115,7 @@ class TestOAuthBackends(unittest.TestCase):
 
     def test_orcid(self):
         self.run_oauth_profile(ORCiD)
+
+    def test_hydra(self):
+        hydra = create_hydra_backend('hydra', 'localhost')
+        self.run_oauth_profile(hydra)
