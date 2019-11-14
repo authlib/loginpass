@@ -9,7 +9,7 @@ with open('loginpass/_consts.py', 'r') as f:
     version = _version_re.search(f.read()).group(1)
 
 
-with open('README.rst') as read_me:
+with open('README.md') as read_me:
     long_description = read_me.read()
 
 
@@ -18,7 +18,11 @@ setup(
     version=version,
     description='Social connections powered by Authlib for Flask and Django',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://authlib.org/',
+    project_urls={
+        'Source Code' 'https://github.com/authlib/loginpass',
+    },
     zip_safe=False,
     license='AGPLv3+',
     packages=['loginpass'],
