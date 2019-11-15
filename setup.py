@@ -21,7 +21,7 @@ setup(
     long_description_content_type='text/markdown',
     url='https://authlib.org/',
     project_urls={
-        'Source Code': 'https://github.com/authlib/loginpass',
+        'Source': 'https://github.com/authlib/loginpass',
     },
     zip_safe=False,
     license='AGPLv3+',
