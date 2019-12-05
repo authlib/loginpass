@@ -71,7 +71,7 @@ class LinkedIn(OAuthBackend):
         resp.raise_for_status()
         data = resp.json()
 
-        handle = data.get('handle~')
+        handle = data.get('elements', [{}])[0].get('handle~')
         if handle:
             return handle.get('emailAddress')
 
