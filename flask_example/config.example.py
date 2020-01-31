@@ -57,7 +57,3 @@ BATTLENET_CLIENT_SECRET = ''
 
 BOX_CLIENT_ID = ''
 BOX_CLIENT_SECRET = ''
-BOX_ACCESS_TOKEN_PARAMS = {
-    'client_id': BOX_CLIENT_ID,
-    'client_secret': BOX_CLIENT_SECRET
-}

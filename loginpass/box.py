@@ -23,6 +23,9 @@ class Box(OAuthBackend):
         'api_base_url': 'https://api.box.com/2.0/',
         'access_token_url': 'https://api.box.com/oauth2/token',
         'authorize_url': 'https://account.box.com/api/oauth2/authorize',
+        'client_kwargs': {
+            'token_endpoint_auth_method': 'client_secret_post'
+        }
     }
 
     def profile(self, **kwargs):
