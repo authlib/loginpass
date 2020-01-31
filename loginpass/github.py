@@ -39,4 +39,15 @@ class GitHub(OAuthBackend):
             'picture': data['avatar_url'],
             'website': data.get('blog'),
         }
+
+        # The email can be be None despite the scope being 'user:email'.
+        # That is because a user can choose to make his/her email private.
+        # If that is the case we get all the users emails regardless if private or note
+        # and use the one he/she has marked as `primary`
+        if params.get("email") is None:
+            resp = self.get("user/emails", **kwargs)
+            resp.raise_for_status()
+            data = resp.json()
+            params["email"] = next(email["email"] for email in data if email["primary"])
+
         return UserInfo(params)

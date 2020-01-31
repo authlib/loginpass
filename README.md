@@ -76,6 +76,7 @@ Connections that Authlib Loginpass contains:
 - [x] Twitch
 - [x] VK
 - [x] Box
+- [x] [Ory Hydra](https://www.ory.sh/docs/hydra/)
 
 Usage
 -----

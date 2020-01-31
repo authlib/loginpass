@@ -1,0 +1,11 @@
+[{
+    "email": "private@github.com",
+    "verified": true,
+    "primary": true,
+    "visibility": "private"
+}, {
+    "email": "another@example.com",
+    "verified": true,
+    "primary": true,
+    "visibility": "public"
+}]

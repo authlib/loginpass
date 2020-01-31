@@ -1,0 +1,24 @@
+{
+   "id":"REDACTED",
+   "firstName":{
+      "localized":{
+         "en_US":"Tina"
+      },
+      "preferredLocale":{
+         "country":"US",
+         "language":"en"
+      }
+   },
+   "lastName":{
+      "localized":{
+         "en_US":"Belcher"
+      },
+      "preferredLocale":{
+         "country":"US",
+         "language":"en"
+      }
+   },
+    "profilePicture": {
+        "displayImage": "urn:li:digitalmediaAsset:B54328XZFfe2134zTyq"
+    }
+}

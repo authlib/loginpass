@@ -24,12 +24,13 @@ from .twitch import Twitch
 from .vk import VK
 from .orcid import ORCiD
 from .box import Box
+from .hydra import create_hydra_backend
 
 
 OAUTH_BACKENDS = [
     BattleNet, Twitter, Facebook, Google, GitHub, Dropbox, Instagram, Reddit,
     Gitlab, Slack, Discord, StackOverflow, Bitbucket, Strava, Spotify, Yandex,
-    Twitch, VK, Box,
+    Twitch, VK, Box
 ]
 
 __all__ = [
@@ -57,6 +58,7 @@ __all__ = [
     'VK',
     'ORCiD',
     'Box',
+    'create_hydra_backend',
     'OAUTH_BACKENDS',
 ]
 
