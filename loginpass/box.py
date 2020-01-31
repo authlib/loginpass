@@ -14,7 +14,7 @@
 """
 
 from authlib.common.urls import url_decode
-from ._core import UserInfo, OAuthBackend
+from ._core import UserInfo, OAuthBackend, map_profile_fields
 
 class Box(OAuthBackend):
     OAUTH_TYPE = '2.0'
@@ -31,12 +31,10 @@ class Box(OAuthBackend):
     def profile(self, **kwargs):
         resp = self.get('users/me', **kwargs)
         resp.raise_for_status()
-        data = resp.json()
-        params = {
-            'sub': data['id'],
-            'name': data['name'],
-            'email': data['login'],
-            'picture': data['avatar_url']
-
-        }
+        params = map_profile_fields(resp.json(), {
+            'sub': 'id',
+            'name': 'name',
+            'email': 'login',
+            'picture': 'avatar_url'
+        })
         return UserInfo(params)
