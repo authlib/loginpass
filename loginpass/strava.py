@@ -26,7 +26,7 @@ class Strava(OAuthBackend):
         'authorize_url': authorize_url,
         'client_kwargs': {
             'response_type': 'code',
-            'scope': 'public',
+            'scope': 'read',
             'token_endpoint_auth_method': 'client_secret_post',
         },
     }
