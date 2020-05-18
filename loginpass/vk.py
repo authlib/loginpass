@@ -14,22 +14,32 @@
 """
 
 import datetime
-from ._core import UserInfo, OAuthBackend, map_profile_fields
+from ._core import map_profile_fields
 
 
-def vk_compliance_fix(session):
-    def _token_response(resp):
-        token = resp.json()
-        token['token_type'] = 'Bearer'
-        resp.json = lambda: token
-        return resp
-
-    session.register_compliance_hook('access_token_response', _token_response)
+USERINFO_ENDPOINT = (
+    'users.get?fields=sex,bdate,has_photo,photo_max_orig,site,screen_name'
+    '&v=5.80'
+)
 
 
-class VK(OAuthBackend):
-    OAUTH_TYPE = '2.0'
-    OAUTH_NAME = 'vk'
+def normalize_userinfo(client, data):
+    return map_profile_fields(data['response'][0], {
+        'sub': lambda o: str(o['id']),
+        'name': _get_name,
+        'given_name': 'first_name',
+        'family_name': 'last_name',
+        'preferred_username': 'screen_name',
+        'profile': _get_profile,
+        'picture': _get_photo,
+        'website': 'site',
+        'gender': _get_sex,
+        'birthdate': _get_bdate
+    })
+
+
+class VK(object):
+    NAME = 'vk'
     OAUTH_CONFIG = {
         'api_base_url': 'https://api.vk.com/method/',
         'access_token_url': 'https://oauth.vk.com/access_token',
@@ -39,31 +49,10 @@ class VK(OAuthBackend):
             'token_endpoint_auth_method': 'client_secret_post',
             'scope': 'email'
         },
-        'compliance_fix': vk_compliance_fix
+        'userinfo_endpoint': USERINFO_ENDPOINT,
+        'userinfo_compliance_fix': normalize_userinfo,
     }
 
-    def profile(self, token=None, **kwargs):
-        params = {}
-        if token and 'email' in token:
-            params['email'] = token['email']
-
-        payload = {'v': '5.80', 'fields': 'sex,bdate,has_photo,photo_max_orig,site,screen_name'}
-        resp = self.get('users.get', params=payload, token=token, **kwargs)
-        resp.raise_for_status()
-        data = resp.json()
-        params.update(map_profile_fields(data['response'][0], {
-            'sub': lambda o: str(o['id']),
-            'name': _get_name,
-            'given_name': 'first_name',
-            'family_name': 'last_name',
-            'preferred_username': 'screen_name',
-            'profile': _get_profile,
-            'picture': _get_photo,
-            'website': 'site',
-            'gender': _get_sex,
-            'birthdate': _get_bdate
-        }))
-        return UserInfo(params)
 
 
 def _get_name(data):

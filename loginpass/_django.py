@@ -1,18 +1,20 @@
-from authlib.common.security import generate_token
-from ._core import register_to
-
 
 def create_django_urlpatterns(backend, oauth, handle_authorize):
     from django.urls import path
-    from authlib.django.client import RemoteApp
 
-    remote = register_to(backend, oauth, RemoteApp)
-    nonce_key = '_{}:nonce'.format(backend.OAUTH_NAME)
-    auth_route_name = 'loginpass_{}_auth'.format(backend.OAUTH_NAME)
-    login_route_name = 'loginpass_{}_login'.format(backend.OAUTH_NAME)
+    token_name = '_loginpass_{}_token'.format(backend.NAME)
+    auth_route_name = 'loginpass_{}_auth'.format(backend.NAME)
+    login_route_name = 'loginpass_{}_login'.format(backend.NAME)
 
-    auth = create_auth_endpoint(remote, nonce_key, handle_authorize)
-    login = create_login_endpoint(remote, backend, nonce_key, auth_route_name)
+    remote = oauth.register(
+        backend.NAME,
+        overwrite=True,
+        fetch_token=lambda request: getattr(request, token_name, None),
+        **backend.OAUTH_CONFIG
+    )
+
+    auth = create_auth_endpoint(remote, handle_authorize)
+    login = create_login_endpoint(remote, backend, auth_route_name)
 
     return [
         path('auth/', auth, name=auth_route_name),
@@ -20,7 +22,7 @@ def create_django_urlpatterns(backend, oauth, handle_authorize):
     ]
 
 
-def create_auth_endpoint(remote, nonce_key, handle_authorize):
+def create_auth_endpoint(remote, handle_authorize):
 
     def auth(request):
         from django.http import HttpResponse
@@ -44,22 +46,23 @@ def create_auth_endpoint(remote, nonce_key, handle_authorize):
             # handle failed
             return handle_authorize(remote, None, None)
         if 'id_token' in token:
-            nonce = request.session[nonce_key]
-            user_info = remote.parse_openid(token, nonce)
+            user_info = remote.parse_openid(request, token)
         else:
-            user_info = remote.profile(token=token)
+            token_name = '_loginpass_{}_token'.format(remote.name)
+            setattr(request, token_name, token)
+            user_info = remote.userinfo(request=request, token=token)
         return handle_authorize(request, remote, token, user_info)
     return auth
 
 
-def create_login_endpoint(remote, backend, nonce_key, auth_route_name):
+def create_login_endpoint(remote, backend, auth_route_name):
     from django.conf import settings
     from django.urls import reverse
 
     config = getattr(settings, 'AUTHLIB_OAUTH_CLIENTS', None)
     authorize_params = None
     if config:
-        backend_config = config.get(backend.OAUTH_NAME)
+        backend_config = config.get(backend.NAME)
         if backend_config:
             authorize_params = backend_config.get('authorize_params')
 
@@ -68,9 +71,5 @@ def create_login_endpoint(remote, backend, nonce_key, auth_route_name):
         params = {}
         if authorize_params:
             params.udpate(authorize_params)
-        if 'oidc' in backend.OAUTH_TYPE:
-            nonce = generate_token(20)
-            request.session[nonce_key] = nonce
-            params['nonce'] = nonce
         return remote.authorize_redirect(request, redirect_uri, **params)
     return login

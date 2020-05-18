@@ -10,16 +10,29 @@
 
     :copyright: (c) 2018 by Hsiaoming Yang
 """
-from ._core import UserInfo, OAuthBackend, map_profile_fields
+from ._core import map_profile_fields
 
 authorize_url = 'https://www.strava.com/oauth/authorize'
 token_url = 'https://www.strava.com/oauth/token'
 api_base_url = 'https://www.strava.com/api/v3/'
 
 
-class Strava(OAuthBackend):
-    OAUTH_TYPE = '2.0'
-    OAUTH_NAME = 'strava'
+def normalize_userinfo(client, data):
+    params = map_profile_fields(data, {
+        'name': _compose_name,
+        'given_name': 'firstname',
+        'family_name': 'lastname',
+        'preferred_username': 'username',
+        'picture': 'profile',
+        'email': 'email',
+        'gender': 'sex'
+    })
+    params['sub'] = str(data['id'])
+    return params
+
+
+class Strava(object):
+    NAME = 'strava'
     OAUTH_CONFIG = {
         'api_base_url': api_base_url,
         'access_token_url': token_url,
@@ -29,24 +42,9 @@ class Strava(OAuthBackend):
             'scope': 'public',
             'token_endpoint_auth_method': 'client_secret_post',
         },
+        'userinfo_endpoint': 'athlete',
+        'userinfo_compliance_fix': normalize_userinfo,
     }
-
-    def profile(self, **kwargs):
-        """Get the user's profile."""
-        resp = self.get('athlete', **kwargs)
-        resp.raise_for_status()
-        data = resp.json()
-        params = map_profile_fields(data, {
-            'name': _compose_name,
-            'given_name': 'firstname',
-            'family_name': 'lastname',
-            'preferred_username': 'username',
-            'picture': 'profile',
-            'email': 'email',
-            'gender': 'sex'
-        })
-        params['sub'] = str(data['id'])
-        return UserInfo(params)
 
 
 def _compose_name(data):

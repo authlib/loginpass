@@ -13,35 +13,35 @@
     :license: BSD, see LICENSE for more details.
 """
 
-from ._core import UserInfo, OAuthBackend, map_profile_fields
+from ._core import map_profile_fields
 
 
-class Bitbucket(OAuthBackend):
-    OAUTH_TYPE = '2.0'
-    OAUTH_NAME = 'bitbucket'
+def normalize_userinfo(client, data):
+    params = map_profile_fields(data, {
+        'sub': 'account_id',
+        'name': 'display_name',
+        'preferred_username': 'username',
+        'address': 'location',
+        'website': 'website',
+        'picture': _get_avatar,
+        'profile': _get_profile,
+    })
+    resp = client.get('user/emails')
+    resp.raise_for_status()
+    params.update(_get_email(resp.json()))
+    return params
+
+
+class Bitbucket(object):
+    NAME = 'bitbucket'
     OAUTH_CONFIG = {
         'api_base_url': 'https://api.bitbucket.org/2.0/',
         'access_token_url': 'https://bitbucket.org/site/oauth2/access_token',
         'authorize_url': 'https://bitbucket.org/site/oauth2/authorize',
+        'userinfo_endpoint': 'https://api.bitbucket.org/2.0/user',
+        'userinfo_compliance_fix': normalize_userinfo,
         'client_kwargs': {'scope': 'email'},
     }
-
-    def profile(self, **kwargs):
-        resp = self.get('user', **kwargs)
-        resp.raise_for_status()
-        params = map_profile_fields(resp.json(), {
-            'sub': 'account_id',
-            'name': 'display_name',
-            'preferred_username': 'username',
-            'address': 'location',
-            'website': 'website',
-            'picture': _get_avatar,
-            'profile': _get_profile,
-        })
-        resp = self.get('user/emails', **kwargs)
-        resp.raise_for_status()
-        params.update(_get_email(resp.json()))
-        return UserInfo(params)
 
 
 def _get_profile(data):

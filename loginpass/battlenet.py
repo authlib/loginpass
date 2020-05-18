@@ -8,24 +8,36 @@
 
     - API documentation: https://develop.battle.net/documentation/guides/using-oauth
 
-    :copyright: (c) 2019 by Corey Burmeister
+    :copyright: (c) 2020 by Hsiaoming Yang
     :license: BSD, see LICENSE for more details.
 """
-from loginpass._core import OAuthBackend, UserInfo
 
 
-class BattleNet(OAuthBackend):
-    OAUTH_TYPE = '2.0'
-    OAUTH_NAME = 'battlenet'
-    OAUTH_CONFIG = {
-        'api_base_url': 'https://us.battle.net/',
-        'access_token_url': 'https://us.battle.net/oauth/token',
-        'authorize_url': 'https://us.battle.net/oauth/authorize',
-        'client_kwargs': {'scope': 'wow.profile sc2.profile'},
-    }
+REGION_ENDPOINTS = {
+    'us': 'https://us.battle.net/',
+    'eu': 'https://eu.battle.net/',
+    'kr': 'https://kr.battle.net/',
+    'tw': 'https://tw.battle.net/',
+    'cn': 'https://www.battlenet.com.cn/',
+}
 
-    def profile(self, **kwargs):
-        resp = self.get('oauth/userinfo', **kwargs)
-        resp.raise_for_status()
-        data = resp.json()
-        return UserInfo(data)
+
+def create_battlenet_backend(name, region='us'):
+    if region and region not in REGION_ENDPOINTS:
+        raise ValueError('Not a vaild "region"')
+
+    host = REGION_ENDPOINTS[region]
+    metadata_url = host + 'oauth/.well-known/openid-configuration'
+
+    class BattleNet(object):
+        NAME = name
+        OAUTH_CONFIG = {
+            'api_base_url': host,
+            'server_metadata_url': metadata_url,
+            'client_kwargs': {'scope': 'openid wow.profile sc2.profile'},
+        }
+
+    return BattleNet
+
+
+BattleNet = create_battlenet_backend('battlenet', 'us')

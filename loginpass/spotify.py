@@ -13,33 +13,33 @@
     :license: BSD, see LICENSE for more details.
 """
 
-from ._core import UserInfo, OAuthBackend, map_profile_fields
+from ._core import map_profile_fields
 
 
-class Spotify(OAuthBackend):
-    OAUTH_TYPE = '2.0'
-    OAUTH_NAME = 'spotify'
+def normalize_userinfo(client, data):
+    return map_profile_fields(data, {
+        'sub': 'id',
+        'name': 'display_name',
+        'profile': _get_profile,
+        'picture': _get_picture,
+        'email': 'email',
+        'birthdate': 'birthdate',
+        'locale': 'country'
+    })
+
+
+class Spotify(object):
+    NAME = 'spotify'
     OAUTH_CONFIG = {
         'api_base_url': 'https://api.spotify.com/v1/',
         'access_token_url': 'https://accounts.spotify.com/api/token',
         'authorize_url': 'https://accounts.spotify.com/authorize',
-        'client_kwargs': {'scope': 'user-read-private user-read-email user-read-birthdate'},
+        'client_kwargs': {
+            'scope': 'user-read-private user-read-email user-read-birthdate'
+        },
+        'userinfo_endpoint': 'me',
+        'userinfo_compliance_fix': normalize_userinfo,
     }
-
-    def profile(self, **kwargs):
-        resp = self.get('me', **kwargs)
-        resp.raise_for_status()
-        data = resp.json()
-        params = map_profile_fields(data, {
-            'sub': 'id',
-            'name': 'display_name',
-            'profile': _get_profile,
-            'picture': _get_picture,
-            'email': 'email',
-            'birthdate': 'birthdate',
-            'locale': 'country'
-        })
-        return UserInfo(params)
 
 
 def _get_profile(data):

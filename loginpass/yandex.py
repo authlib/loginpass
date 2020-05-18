@@ -13,7 +13,21 @@
     :license: BSD, see LICENSE for more details.
 """
 
-from ._core import UserInfo, OAuthBackend, map_profile_fields
+from ._core import map_profile_fields
+
+
+def normalize_userinfo(client, data):
+    return map_profile_fields(data, {
+        'sub': 'id',
+        'name': 'real_name',
+        'given_name': 'first_name',
+        'family_name': 'last_name',
+        'preferred_username': 'login',
+        'picture': _get_picture,
+        'email': 'default_email',
+        'gender': 'sex',
+        'birthdate': 'birthday'
+    })
 
 
 class Yandex(OAuthBackend):
@@ -23,24 +37,9 @@ class Yandex(OAuthBackend):
         'api_base_url': 'https://login.yandex.ru/',
         'access_token_url': 'https://oauth.yandex.com/token',
         'authorize_url': 'https://oauth.yandex.com/authorize',
+        'userinfo_endpoint': 'info',
+        'userinfo_compliance_fix': normalize_userinfo,
     }
-
-    def profile(self, **kwargs):
-        resp = self.get('info', **kwargs)
-        resp.raise_for_status()
-        data = resp.json()
-        params = map_profile_fields(data, {
-            'sub': 'id',
-            'name': 'real_name',
-            'given_name': 'first_name',
-            'family_name': 'last_name',
-            'preferred_username': 'login',
-            'picture': _get_picture,
-            'email': 'default_email',
-            'gender': 'sex',
-            'birthdate': 'birthday'
-        })
-        return UserInfo(params)
 
 
 def _get_picture(data):

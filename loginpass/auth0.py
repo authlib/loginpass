@@ -9,8 +9,6 @@
     :license: BSD, see LICENSE for more details.
 """
 
-from ._core import UserInfo, OAuthBackend, parse_id_token
-
 ALLOW_REGIONS = ['us', 'eu', 'au']
 
 
@@ -24,31 +22,12 @@ def create_auth0_backend(name, tenant, region=None):
     else:
         host = 'https://{}.{}.auth0.com/'.format(tenant, region)
 
-    authorize_url = '{}authorize'.format(host)
-    token_url = '{}oauth/token'.format(host)
-
-    class Auth0(OAuthBackend):
-        OAUTH_TYPE = '2.0,oidc'
-        OAUTH_NAME = name
+    class Auth0(object):
+        NAME = name
         OAUTH_CONFIG = {
             'api_base_url': host,
-            'access_token_url': token_url,
-            'authorize_url': authorize_url,
+            'server_metadata_url': host + '.well-known/openid-configuration',
             'client_kwargs': {'scope': 'openid email profile'},
         }
-        JWK_SET_URL = '.well-known/jwks.json'.format(host)
-
-        def profile(self, **kwargs):
-            resp = self.get('userinfo', **kwargs)
-            resp.raise_for_status()
-            data = resp.json()
-            return UserInfo(data)
-
-        def parse_openid(self, token, nonce=None):
-            return parse_id_token(
-                self, token['id_token'],
-                {"iss": {"values": [host]}},
-                token.get('access_token'), nonce
-            )
 
     return Auth0

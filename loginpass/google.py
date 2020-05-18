@@ -11,44 +11,19 @@
 
 import json
 from authlib.client import AssertionSession
-from ._core import UserInfo, OAuthBackend, parse_id_token
 
 
 GOOGLE_API_URL = 'https://www.googleapis.com/'
-GOOGLE_TOKEN_URL = GOOGLE_API_URL + 'oauth2/v4/token'
-GOOGLE_JWK_URL = GOOGLE_API_URL + 'oauth2/v3/certs'
-GOOGLE_AUTH_URL = (
-    'https://accounts.google.com/o/oauth2/v2/auth'
-    '?access_type=offline'
-)
-GOOGLE_CLAIMS_OPTIONS = {
-    "iss": {
-        "values": ['https://accounts.google.com', 'accounts.google.com']
-    }
-}
+METADATA_URL = 'https://accounts.google.com/.well-known/openid-configuration'
 
 
-class Google(OAuthBackend):
-    OAUTH_TYPE = '2.0,oidc'
-    OAUTH_NAME = 'google'
+class Google(object):
+    NAME = 'google'
     OAUTH_CONFIG = {
         'api_base_url': GOOGLE_API_URL,
-        'access_token_url': GOOGLE_TOKEN_URL,
-        'authorize_url': GOOGLE_AUTH_URL,
+        'server_metadata_url': METADATA_URL,
         'client_kwargs': {'scope': 'openid email profile'},
     }
-    JWK_SET_URL = GOOGLE_JWK_URL
-
-    def profile(self, **kwargs):
-        resp = self.get('oauth2/v3/userinfo', **kwargs)
-        resp.raise_for_status()
-        return UserInfo(resp.json())
-
-    def parse_openid(self, token, nonce=None):
-        return parse_id_token(
-            self, token['id_token'], GOOGLE_CLAIMS_OPTIONS,
-            token.get('access_token'), nonce
-        )
 
 
 class GoogleServiceAccount(AssertionSession):

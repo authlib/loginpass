@@ -12,34 +12,21 @@
     :license: BSD, see LICENSE for more details.
 """
 
-from ._core import UserInfo, OAuthBackend
-
 
 def create_hydra_backend(name, hostname):
     """Build Hydra OAuth Backend."""
-    api_base_url = 'https://{hostname}'.format(hostname=hostname)
-    authorize_url = 'https://{hostname}/oauth2/auth'.format(hostname=hostname)
-    token_url = 'https://{hostname}/oauth2/token'.format(hostname=hostname)
+    api_base_url = 'https://{}'.format(hostname)
+    authorize_url = 'https://{}/oauth2/auth'.format(hostname)
+    token_url = 'https://{}/oauth2/token'.format(hostname)
 
-    class Hydra(OAuthBackend):
-        OAUTH_TYPE = '2.0,oidc'
-        OAUTH_NAME = name
+    class Hydra(object):
+        NAME = name
         OAUTH_CONFIG = {
             'api_base_url': api_base_url,
             'access_token_url': token_url,
-            'authorize_url': authorize_url
+            'authorize_url': authorize_url,
+            'userinfo_endpoint': 'userinfo',
             # customisations can added in client kwargs
         }
-
-        def profile(self, **kwargs):
-            resp = self.get('userinfo', **kwargs)
-            resp.raise_for_status()
-            data = resp.json()
-            if not kwargs.get('param_keys'):
-                params = data
-            else:
-                params = {k: data[k] for k in kwargs.get('param_keys')}
-
-            return UserInfo(params)
 
     return Hydra

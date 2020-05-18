@@ -1,13 +1,9 @@
-from authlib.common.security import generate_token
-from ._core import register_to
-
-
 def create_flask_blueprint(backend, oauth, handle_authorize):
     """Create a Flask blueprint that you can register it directly to Flask
     app. The blueprint contains two route: ``/auth`` and ``/login``::
 
         from flask import Flask
-        from authlib.flask.client import OAuth
+        from authlib.integrations.flask_client import OAuth
         from loginpass import create_flask_blueprint, GitHub
 
         app = Flask(__name__)
@@ -33,15 +29,14 @@ def create_flask_blueprint(backend, oauth, handle_authorize):
     :param handle_authorize: A function to handle authorized response
     :return: Flask Blueprint instance
     """
-    from flask import Blueprint, request, url_for, current_app, session
-    from authlib.flask.client import RemoteApp
+    from flask import Blueprint, request, url_for, current_app
 
-    remote = register_to(backend, oauth, RemoteApp)
-    nonce_key = '_{}:nonce'.format(backend.OAUTH_NAME)
-    bp = Blueprint('loginpass_' + backend.OAUTH_NAME, __name__)
+    oauth.register(backend.NAME, overwrite=True, **backend.OAUTH_CONFIG)
+    bp = Blueprint('loginpass_' + backend.NAME, __name__)
 
     @bp.route('/auth', methods=('GET', 'POST'))
     def auth():
+        remote = oauth.create_client(backend.NAME)
         id_token = request.values.get('id_token')
         if request.values.get('code'):
             token = remote.authorize_access_token()
@@ -56,21 +51,18 @@ def create_flask_blueprint(backend, oauth, handle_authorize):
             # handle failed
             return handle_authorize(remote, None, None)
         if 'id_token' in token:
-            nonce = session[nonce_key]
-            user_info = remote.parse_openid(token, nonce)
+            user_info = remote.parse_openid(token)
         else:
-            user_info = remote.profile(token=token)
+            remote.token = token
+            user_info = remote.userinfo(token=token)
         return handle_authorize(remote, token, user_info)
 
     @bp.route('/login')
     def login():
+        remote = oauth.create_client(backend.NAME)
         redirect_uri = url_for('.auth', _external=True)
-        conf_key = '{}_AUTHORIZE_PARAMS'.format(backend.OAUTH_NAME.upper())
+        conf_key = '{}_AUTHORIZE_PARAMS'.format(backend.NAME.upper())
         params = current_app.config.get(conf_key, {})
-        if 'oidc' in backend.OAUTH_TYPE:
-            nonce = generate_token(20)
-            session[nonce_key] = nonce
-            params['nonce'] = nonce
         return remote.authorize_redirect(redirect_uri, **params)
 
     return bp

@@ -13,12 +13,22 @@
     :license: BSD, see LICENSE for more details.
 """
 
-from ._core import UserInfo, OAuthBackend, map_profile_fields
+from ._core import map_profile_fields
 
 
-class Twitch(OAuthBackend):
-    OAUTH_TYPE = '2.0'
-    OAUTH_NAME = 'twitch'
+def normalize_userinfo(client, data):
+    return map_profile_fields(data[0], {
+        'sub': 'id',
+        'name': 'display_name',
+        'preferred_username': 'login',
+        'profile': _get_profile,
+        'picture': 'profile_image_url',
+        'email': 'email',
+    })
+
+
+class Twitch(object):
+    NAME = 'twitch'
     OAUTH_CONFIG = {
         'api_base_url': 'https://api.twitch.tv/helix/',
         'access_token_url': 'https://id.twitch.tv/oauth2/token',
@@ -27,21 +37,9 @@ class Twitch(OAuthBackend):
             'token_endpoint_auth_method': 'client_secret_post',
             'scope': 'user:read:email'
         },
+        'userinfo_endpoint': 'users',
+        'userinfo_compliance_fix': normalize_userinfo,
     }
-
-    def profile(self, **kwargs):
-        resp = self.get('users', **kwargs)
-        resp.raise_for_status()
-        data = resp.json()['data'][0]
-        params = map_profile_fields(data, {
-            'sub': 'id',
-            'name': 'display_name',
-            'preferred_username': 'login',
-            'profile': _get_profile,
-            'picture': 'profile_image_url',
-            'email': 'email',
-        })
-        return UserInfo(params)
 
 
 def _get_profile(data):

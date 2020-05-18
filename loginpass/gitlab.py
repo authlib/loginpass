@@ -13,45 +13,35 @@
     :license: BSD, see LICENSE for more details.
 """
 
-from ._core import UserInfo, OAuthBackend
+
+def normalize_userinfo(client, data):
+    return {
+        'sub': str(data['id']),
+        'name': data['name'],
+        'email': data.get('email'),
+        'preferred_username': data['username'],
+        'profile': data['web_url'],
+        'picture': data['avatar_url'],
+        'website': data.get('website_url'),
+    }
 
 
 def create_gitlab_backend(name, hostname):
     """Build Gitlab OAuth Backend."""
-    api_base_url = 'https://{hostname}/api/v4/'.format(hostname=hostname)
-    authorize_url = 'https://{hostname}/oauth/authorize'.format(hostname=hostname)
-    token_url = 'https://{hostname}/oauth/token'.format(hostname=hostname)
+    api_base_url = 'https://{}/api/v4/'.format(hostname)
+    authorize_url = 'https://{}/oauth/authorize'.format(hostname)
+    token_url = 'https://{}/oauth/token'.format(hostname)
 
-    class GitlabEE(OAuthBackend):
-        OAUTH_TYPE = '2.0'
-        OAUTH_NAME = name
+    class GitlabEE(object):
+        NAME = name
         OAUTH_CONFIG = {
             'api_base_url': api_base_url,
             'access_token_url': token_url,
             'authorize_url': authorize_url,
+            'userinfo_endpoint': 'user',
+            'userinfo_compliance_fix': normalize_userinfo,
             'client_kwargs': {'scope': 'read_user'},
         }
-
-        def profile(self, **kwargs):
-            resp = self.get('user', **kwargs)
-            resp.raise_for_status()
-            data = resp.json()
-            params = {
-                'sub': str(data['id']),
-                'name': data['name'],
-                'email': data.get('email'),
-                'preferred_username': data['username'],
-                'profile': data['web_url'],
-                'picture': data['avatar_url'],
-                'website': data.get('website_url'),
-            }
-            return UserInfo(params)
-
-        def parse_openid(self, token, nonce=None):
-            # https://docs.gitlab.com/ee/integration/openid_connect_provider.html
-            # Although Gitlab claims that it support OIDC, the return
-            # value doesn't contains the information it claims.
-            raise NotImplementedError()
 
     return GitlabEE
 
