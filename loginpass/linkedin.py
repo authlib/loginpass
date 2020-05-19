@@ -28,11 +28,13 @@ def normalize_userinfo(client, data):
     resp.raise_for_status()
     data = resp.json()
 
-    handle = data.get('handle~')
-    if handle:
-        email = handle.get('emailAddress')
-        if email:
-            params['email'] = email
+    elements = data.get('elements')
+    if elements:
+        handle = elements[0].get('handle~')
+        if handle:
+            email = handle.get('emailAddress')
+            if email:
+                params['email'] = email
     return params
 
 

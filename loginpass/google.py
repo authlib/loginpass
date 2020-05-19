@@ -10,7 +10,7 @@
 """
 
 import json
-from authlib.client import AssertionSession
+from authlib.integrations.requests_client import AssertionSession
 
 
 GOOGLE_API_URL = 'https://www.googleapis.com/'

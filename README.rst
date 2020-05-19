@@ -2,7 +2,7 @@ Authlib Loginpass
 =================
 
 Social connections powered by Authlib_. This library is a part of Authlib project.
-It works well with Authlib v0.7+.
+It works well with Authlib v0.14.3+.
 
 .. _Authlib: https://authlib.org/
 

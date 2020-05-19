@@ -1,6 +1,8 @@
-def create_flask_blueprint(backend, oauth, handle_authorize):
+
+def create_flask_blueprint(backends, oauth, handle_authorize):
     """Create a Flask blueprint that you can register it directly to Flask
-    app. The blueprint contains two route: ``/auth`` and ``/login``::
+    app. The blueprint contains two route: ``/auth/<name>`` and
+    ``/login/<name>``::
 
         from flask import Flask
         from authlib.integrations.flask_client import OAuth
@@ -18,25 +20,31 @@ def create_flask_blueprint(backend, oauth, handle_authorize):
                 return user_page
             raise some_error
 
-        github_bp = create_flask_blueprint(GitHub, oauth, handle_authorize)
-        app.register_blueprint(github_bp, url_prefix='/github')
+        account_bp = create_flask_blueprint(
+            oauth, [GitHub, Google], handle_authorize)
+        app.register_blueprint(account_bp, url_prefix='/account')
 
-        # visit /github/login
-        # callback /github/auth
+        # visit /account/login/github
+        # callback /account/auth/github
 
-    :param backend: An OAuthBackend
     :param oauth: Authlib Flask OAuth instance
+    :param backends: A list of configured backends
     :param handle_authorize: A function to handle authorized response
     :return: Flask Blueprint instance
     """
-    from flask import Blueprint, request, url_for, current_app
+    from flask import Blueprint, request, url_for, current_app, abort
 
-    oauth.register(backend.NAME, overwrite=True, **backend.OAUTH_CONFIG)
-    bp = Blueprint('loginpass_' + backend.NAME, __name__)
+    for b in backends:
+        register_to(oauth, b)
 
-    @bp.route('/auth', methods=('GET', 'POST'))
-    def auth():
-        remote = oauth.create_client(backend.NAME)
+    bp = Blueprint('loginpass', __name__)
+
+    @bp.route('/auth/<name>', methods=('GET', 'POST'))
+    def auth(name):
+        remote = oauth.create_client(name)
+        if remote is None:
+            abort(404)
+
         id_token = request.values.get('id_token')
         if request.values.get('code'):
             token = remote.authorize_access_token()
@@ -57,12 +65,24 @@ def create_flask_blueprint(backend, oauth, handle_authorize):
             user_info = remote.userinfo(token=token)
         return handle_authorize(remote, token, user_info)
 
-    @bp.route('/login')
-    def login():
-        remote = oauth.create_client(backend.NAME)
-        redirect_uri = url_for('.auth', _external=True)
-        conf_key = '{}_AUTHORIZE_PARAMS'.format(backend.NAME.upper())
+    @bp.route('/login/<name>')
+    def login(name):
+        remote = oauth.create_client(name)
+        if remote is None:
+            abort(404)
+
+        redirect_uri = url_for('.auth', name=name, _external=True)
+        conf_key = '{}_AUTHORIZE_PARAMS'.format(name.upper())
         params = current_app.config.get(conf_key, {})
         return remote.authorize_redirect(redirect_uri, **params)
 
     return bp
+
+
+def register_to(oauth, backend_cls):
+    from authlib.integrations.flask_client import FlaskRemoteApp
+
+    class RemoteApp(backend_cls, FlaskRemoteApp):
+        OAUTH_APP_CONFIG = backend_cls.OAUTH_CONFIG
+
+    oauth.register(RemoteApp.NAME, overwrite=True, client_cls=RemoteApp)

@@ -1,6 +1,10 @@
 
 def create_django_urlpatterns(backend, oauth, handle_authorize):
+    from authlib.integrations.django_client import DjangoRemoteApp
     from django.urls import path
+
+    class RemoteApp(backend, DjangoRemoteApp):
+        OAUTH_APP_CONFIG = backend.OAUTH_CONFIG
 
     token_name = '_loginpass_{}_token'.format(backend.NAME)
     auth_route_name = 'loginpass_{}_auth'.format(backend.NAME)
@@ -10,7 +14,7 @@ def create_django_urlpatterns(backend, oauth, handle_authorize):
         backend.NAME,
         overwrite=True,
         fetch_token=lambda request: getattr(request, token_name, None),
-        **backend.OAUTH_CONFIG
+        client_cls=RemoteApp,
     )
 
     auth = create_auth_endpoint(remote, handle_authorize)

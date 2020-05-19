@@ -1,11 +1,11 @@
 from ._flask import create_flask_blueprint
 from ._django import create_django_urlpatterns
 from ._consts import version, homepage
-# from .azure import Azure, create_azure_backend
+from .azure import Azure, create_azure_backend
 from .battlenet import BattleNet, create_battlenet_backend
 from .google import Google, GoogleServiceAccount
 from .github import GitHub
-# from .facebook import Facebook
+from .facebook import Facebook
 from .instagram import Instagram
 from .twitter import Twitter
 from .dropbox import Dropbox
@@ -25,34 +25,14 @@ from .orcid import ORCiD
 from .hydra import create_hydra_backend
 
 
-OAUTH_BACKENDS = [
-    BattleNet,
-    Twitter,
-    # Facebook,
-    Google,
-    GitHub,
-    Dropbox,
-    Instagram,
-    Reddit,
-    Gitlab,
-    Slack,
-    Discord,
-    StackOverflow,
-    Bitbucket,
-    Strava,
-    Spotify,
-    Yandex,
-    Twitch, VK
-]
-
 __all__ = [
     'create_flask_blueprint',
     'create_django_urlpatterns',
-    # 'Azure', 'create_azure_backend',
+    'Azure', 'create_azure_backend',
     'BattleNet', 'create_battlenet_backend',
     'Google', 'GoogleServiceAccount',
     'GitHub',
-    # 'Facebook',
+    'Facebook',
     'Twitter',
     'Dropbox',
     'LinkedIn',
@@ -69,7 +49,6 @@ __all__ = [
     'VK',
     'ORCiD',
     'create_hydra_backend',
-    'OAUTH_BACKENDS',
 ]
 
 __version__ = version

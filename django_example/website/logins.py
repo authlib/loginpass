@@ -2,9 +2,10 @@ from django.http import HttpResponse, JsonResponse
 from django.urls import include, path
 from authlib.django.client import OAuth
 from loginpass import create_django_urlpatterns
-from loginpass import OAUTH_BACKENDS
+from loginpass import Twitter, GitHub, Google
 
 oauth = OAuth()
+backends = [Twitter, GitHub, Google]
 
 
 def handle_authorize(request, remote, token, user_info):
@@ -12,13 +13,13 @@ def handle_authorize(request, remote, token, user_info):
 
 
 urlpatterns = []
-for backend in OAUTH_BACKENDS:
+for backend in backends:
     oauth_urls = create_django_urlpatterns(backend, oauth, handle_authorize)
-    urlpatterns.append(path(backend.OAUTH_NAME + '/', include(oauth_urls)))
+    urlpatterns.append(path(backend.NAME + '/', include(oauth_urls)))
 
 
 def home(request):
     tpl = '<li><a href="/{}/login">{}</a></li>'
-    lis = [tpl.format(b.OAUTH_NAME, b.OAUTH_NAME) for b in OAUTH_BACKENDS]
+    lis = [tpl.format(b.NAME, b.NAME) for b in backends]
     html = '<ul>{}</ul>'.format(''.join(lis))
     return HttpResponse(html)

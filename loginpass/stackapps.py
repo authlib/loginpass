@@ -14,7 +14,7 @@
 """
 
 from authlib.common.urls import add_params_to_uri, url_decode
-from ._core import UserInfo, OAuthBackend, map_profile_fields
+from ._core import map_profile_fields
 
 
 def _stackapps_compliance_fix(session, site):
@@ -72,7 +72,7 @@ def create_stackapps_backend(name, site):
                 'token_placement': 'uri',
                 'token_endpoint_auth_method': 'client_secret_post',
             },
-            'compliance_fix': lambda s: _stackapps_compliance_fix(s, site)
+            'compliance_fix': lambda s: _stackapps_compliance_fix(s, site),
             'userinfo_endpoint': 'me',
             'userinfo_compliance_fix': normalize_userinfo,
         }

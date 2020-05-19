@@ -30,9 +30,8 @@ def normalize_userinfo(client, data):
     })
 
 
-class Yandex(OAuthBackend):
-    OAUTH_TYPE = '2.0'
-    OAUTH_NAME = 'yandex'
+class Yandex(object):
+    NAME = 'yandex'
     OAUTH_CONFIG = {
         'api_base_url': 'https://login.yandex.ru/',
         'access_token_url': 'https://oauth.yandex.com/token',

@@ -2,7 +2,7 @@ Authlib Loginpass
 =================
 
 Social connections powered by [Authlib][]. This library is a part of Authlib project.
-It works well with Authlib v0.7+.
+It works well with Authlib v0.14.3+.
 
 [Authlib]: https://authlib.org/
 
@@ -14,8 +14,9 @@ It works well with Authlib v0.7+.
 
 ```python
 from flask import Flask
-from authlib.flask.client import OAuth
-from loginpass import create_flask_blueprint, GitHub
+from authlib.integrations.flask_client import OAuth
+from loginpass import create_flask_blueprint
+from loginpass import Twitter, GitHub, Google
 
 app = Flask(__name__)
 oauth = OAuth(app)
@@ -28,8 +29,9 @@ def handle_authorize(remote, token, user_info):
         return user_page
     raise some_error
 
-github_bp = create_flask_blueprint(GitHub, oauth, handle_authorize)
-app.register_blueprint(github_bp, url_prefix='/github')
+backends = [Twitter, GitHub, Google]
+bp = create_flask_blueprint(backends, oauth, handle_authorize)
+app.register_blueprint(bp, url_prefix='')
 ```
 
 Useful Links
