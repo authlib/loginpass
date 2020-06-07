@@ -89,6 +89,16 @@ examples for details.
 [Flask]: https://docs.authlib.org/en/latest/client/flask.html
 [Django]: https://docs.authlib.org/en/latest/client/django.html
 
+
+Alternatives
+------------
+
+Most of the time, you don't have to use loginpass, you can just register
+a remote app with Authlib's framework integrations. Checkout our demo on
+OAuth clients for Flask, Django, Starlette and FastAPI:
+
+<https://github.com/authlib/demo-oauth-client>
+
 License
 -------
 
