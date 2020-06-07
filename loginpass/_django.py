@@ -50,7 +50,7 @@ def create_auth_endpoint(remote, handle_authorize):
             # handle failed
             return handle_authorize(remote, None, None)
         if 'id_token' in token:
-            user_info = remote.parse_openid(request, token)
+            user_info = remote.parse_id_token(request, token)
         else:
             token_name = '_loginpass_{}_token'.format(remote.name)
             setattr(request, token_name, token)

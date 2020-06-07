@@ -59,7 +59,7 @@ def create_flask_blueprint(backends, oauth, handle_authorize):
             # handle failed
             return handle_authorize(remote, None, None)
         if 'id_token' in token:
-            user_info = remote.parse_openid(token)
+            user_info = remote.parse_id_token(token)
         else:
             remote.token = token
             user_info = remote.userinfo(token=token)
