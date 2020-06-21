@@ -21,14 +21,14 @@ def create_flask_blueprint(backends, oauth, handle_authorize):
             raise some_error
 
         account_bp = create_flask_blueprint(
-            oauth, [GitHub, Google], handle_authorize)
+            [GitHub, Google], oauth, handle_authorize)
         app.register_blueprint(account_bp, url_prefix='/account')
 
         # visit /account/login/github
         # callback /account/auth/github
 
-    :param oauth: Authlib Flask OAuth instance
     :param backends: A list of configured backends
+    :param oauth: Authlib Flask OAuth instance
     :param handle_authorize: A function to handle authorized response
     :return: Flask Blueprint instance
     """
