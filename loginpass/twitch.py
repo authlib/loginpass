@@ -16,6 +16,18 @@
 from ._core import map_profile_fields
 
 
+def twitch_compliance_fix(session):
+    
+    # https://discuss.dev.twitch.tv/t/requiring-oauth-for-helix-twitch-api-endpoints/23916
+    def fix_protected_request(url, headers, data):
+        headers["Client-ID"] = session.client_id
+        return url, headers, data
+
+
+    session.register_compliance_hook(
+        'protected_request', fix_protected_request)
+
+
 def normalize_userinfo(client, data):
     return map_profile_fields(data[0], {
         'sub': 'id',
@@ -39,6 +51,7 @@ class Twitch(object):
         },
         'userinfo_endpoint': 'users',
         'userinfo_compliance_fix': normalize_userinfo,
+        'compliance_fix': twitch_compliance_fix,
     }
 
 
