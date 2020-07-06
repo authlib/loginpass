@@ -17,7 +17,8 @@ from ._core import map_profile_fields
 
 
 def twitch_compliance_fix(session):
-
+    
+    # https://discuss.dev.twitch.tv/t/requiring-oauth-for-helix-twitch-api-endpoints/23916
     def fix_protected_request(url, headers, data):
         headers["Client-ID"] = session.client_id
         return url, headers, data
