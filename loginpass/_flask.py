@@ -32,6 +32,7 @@ def create_flask_blueprint(backends, oauth, handle_authorize):
     :param handle_authorize: A function to handle authorized response
     :return: Flask Blueprint instance
     """
+    from authlib.common.security import generate_token
     from flask import Blueprint, request, url_for, current_app, abort
 
     for b in backends:
@@ -74,7 +75,14 @@ def create_flask_blueprint(backends, oauth, handle_authorize):
         redirect_uri = url_for('.auth', name=name, _external=True)
         conf_key = '{}_AUTHORIZE_PARAMS'.format(name.upper())
         params = current_app.config.get(conf_key, {})
-        return remote.authorize_redirect(redirect_uri, **params)
+
+        # Reuse existing CSRF state value from session
+        state = remote.framework.get_session_data(request, 'state')
+        if not state:
+            state = generate_token()
+            remote.framework.set_session_data(request, 'state', state)
+
+        return remote.authorize_redirect(redirect_uri, state=state, **params)
 
     return bp
 
