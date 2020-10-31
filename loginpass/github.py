@@ -24,7 +24,6 @@ class GitHub(object):
         'authorize_url': 'https://github.com/login/oauth/authorize',
         'client_kwargs': {'scope': 'user:email'},
         'userinfo_endpoint': 'https://api.github.com/user',
-        'userinfo_compliance_fix': normalize_userinfo,
     }
 
     def userinfo(self, **kwargs):
