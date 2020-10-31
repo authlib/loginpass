@@ -12,30 +12,7 @@
     :license: BSD, see LICENSE for more details.
 """
 
-
-def normalize_userinfo(client, data):
-    given_name = get_localized_value(data['firstName'])
-    family_name = get_localized_value(data['lastName'])
-    params = {
-        'sub': data['id'],
-        'given_name': given_name,
-        'family_name': family_name,
-        'name': ' '.join([given_name, family_name]),
-    }
-
-    url = 'emailAddress?q=members&projection=(elements*(handle~))'
-    resp = client.get(url)
-    resp.raise_for_status()
-    data = resp.json()
-
-    elements = data.get('elements')
-    if elements:
-        handle = elements[0].get('handle~')
-        if handle:
-            email = handle.get('emailAddress')
-            if email:
-                params['email'] = email
-    return params
+from authlib.oidc.core import UserInfo
 
 
 class LinkedIn(object):
@@ -49,8 +26,35 @@ class LinkedIn(object):
             'token_endpoint_auth_method': 'client_secret_post',
         },
         'userinfo_endpoint': 'me?projection=(id,firstName,lastName)',
-        'userinfo_compliance_fix': normalize_userinfo,
     }
+
+    def userinfo(self, **kwargs):
+        resp = self.get(self.OAUTH_CONFIG['userinfo_endpoint'], **kwargs)
+        data = resp.json()
+
+        given_name = get_localized_value(data['firstName'])
+        family_name = get_localized_value(data['lastName'])
+        params = {
+            'sub': data['id'],
+            'given_name': given_name,
+            'family_name': family_name,
+            'name': ' '.join([given_name, family_name]),
+        }
+
+        url = 'emailAddress?q=members&projection=(elements*(handle~))'
+        resp = self.get(url, **kwargs)
+        resp.raise_for_status()
+        data = resp.json()
+
+        elements = data.get('elements')
+        if elements:
+            handle = elements[0].get('handle~')
+            if handle:
+                email = handle.get('emailAddress')
+                if email:
+                    params['email'] = email
+
+        return UserInfo(params)
 
 
 def get_localized_value(name):

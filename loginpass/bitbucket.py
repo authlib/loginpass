@@ -13,23 +13,8 @@
     :license: BSD, see LICENSE for more details.
 """
 
+from authlib.oidc.core import UserInfo
 from ._core import map_profile_fields
-
-
-def normalize_userinfo(client, data):
-    params = map_profile_fields(data, {
-        'sub': 'account_id',
-        'name': 'display_name',
-        'preferred_username': 'username',
-        'address': 'location',
-        'website': 'website',
-        'picture': _get_avatar,
-        'profile': _get_profile,
-    })
-    resp = client.get('user/emails')
-    resp.raise_for_status()
-    params.update(_get_email(resp.json()))
-    return params
 
 
 class Bitbucket(object):
@@ -39,9 +24,26 @@ class Bitbucket(object):
         'access_token_url': 'https://bitbucket.org/site/oauth2/access_token',
         'authorize_url': 'https://bitbucket.org/site/oauth2/authorize',
         'userinfo_endpoint': 'https://api.bitbucket.org/2.0/user',
-        'userinfo_compliance_fix': normalize_userinfo,
         'client_kwargs': {'scope': 'email'},
     }
+
+    def userinfo(self, **kwargs):
+        resp = self.get(self.OAUTH_CONFIG['userinfo_endpoint'], **kwargs)
+        data = resp.json()
+
+        params = map_profile_fields(data, {
+            'sub': 'account_id',
+            'name': 'display_name',
+            'preferred_username': 'username',
+            'address': 'location',
+            'website': 'website',
+            'picture': _get_avatar,
+            'profile': _get_profile,
+        })
+        resp = self.get('user/emails', **kwargs)
+        resp.raise_for_status()
+        params.update(_get_email(resp.json()))
+        return UserInfo(params)
 
 
 def _get_profile(data):
