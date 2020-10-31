@@ -9,13 +9,13 @@
 """
 
 
-def create_azure_backend(name, tenant, version=2):
+def create_azure_backend(name, tenant, version=2, compliance_fix=None):
 
-    base_url = 'https://login.microsoftonline.com/common/'
+    base_url = 'https://login.microsoftonline.com/' + tenant
     if version == 1:
-        metadata_url = base_url + '.well-known/openid-configuration'
+        metadata_url = base_url + '/.well-known/openid-configuration'
     elif version == 2:
-        metadata_url = base_url + 'v2.0/.well-known/openid-configuration'
+        metadata_url = base_url + '/v2.0/.well-known/openid-configuration'
     else:
         raise ValueError('Invalid version value')
 
@@ -29,13 +29,11 @@ def create_azure_backend(name, tenant, version=2):
 
         def load_server_metadata(self):
             metadata = super(AzureAD, self).load_server_metadata()
-            # fix issuer value
-            issuer = metadata['issuer']
-            issuer = issuer.replace('{tenantid}', tenant)
-            metadata['issuer'] = issuer
+            if compliance_fix:
+                metadata = compliance_fix(metadata)
             return metadata
 
     return AzureAD
 
 
-Azure = create_azure_backend('azure', 'common')
+Azure = create_azure_backend('azure', 'consumers')
