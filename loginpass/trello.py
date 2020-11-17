@@ -10,15 +10,16 @@
 """
 
 def normalize_userinfo(client, data):
-  params = {
-      "sub": data["id"],
-      "name": data["fullName"],
-      "email": data.get("email"),
-      "picture": data.get("avatarUrl"),
-      "preferred_username": data.get("username"),
-      "profile": data.get("url"),
-  }
-  return params
+    params = {
+        "sub": data["id"],
+        "name": data["fullName"],
+        "email": data.get("email"),
+        "picture": data.get("avatarUrl"),
+        "preferred_username": data.get("username"),
+        "profile": data.get("url"),
+        "locale": data.get("prefs", {}).get("locale"),
+    }
+    return params
 
 
 class Trello(object):
