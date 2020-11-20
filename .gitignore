@@ -13,6 +13,7 @@ parts
 docs/_build
 htmlcov/
 venv/
+env/
 .tox
 .coverage*
 .pytest_cache/
@@ -21,3 +22,4 @@ venv/
 *.sqlite3
 
 flask_example/config.py
+fastapi_example/.env

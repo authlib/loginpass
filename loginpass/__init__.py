@@ -1,4 +1,5 @@
 from ._flask import create_flask_blueprint
+from ._fastapi import create_fastapi_routes
 from ._django import create_django_urlpatterns
 from ._consts import version, homepage
 from .azure import Azure, create_azure_backend
@@ -27,12 +28,14 @@ from .hydra import create_hydra_backend
 
 __all__ = [
     'create_flask_blueprint',
+    'create_fastapi_routes',
     'create_django_urlpatterns',
     'Azure', 'create_azure_backend',
     'BattleNet', 'create_battlenet_backend',
     'Google', 'GoogleServiceAccount',
     'GitHub',
     'Facebook',
+    'Instagram',
     'Twitter',
     'Dropbox',
     'LinkedIn',
