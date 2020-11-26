@@ -18,7 +18,7 @@ def create_fastapi_routes(backends, oauth, handle_authorize):
 
         app.add_middleware(SessionMiddleware, secret_key=config.get("SECRET_KEY"))
 
-        def handle_authorize(remote, token, user_info):
+        def handle_authorize(remote, token, user_info, request):
             return user_info
 
         router = create_fastapi_routes([GitHub, Google], oauth, handle_authorize)
@@ -69,7 +69,7 @@ def create_fastapi_routes(backends, oauth, handle_authorize):
         else:
             remote.token = token
             user_info = await remote.userinfo(token=token)
-        return handle_authorize(remote, token, user_info)
+        return handle_authorize(remote, token, user_info, request)
 
     @router.get("/login/{backend}")
     async def login(backend: str, request: Request):
