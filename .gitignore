@@ -21,3 +21,4 @@ venv/
 *.sqlite3
 
 flask_example/config.py
+fastapi_example/.env
