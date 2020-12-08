@@ -77,7 +77,7 @@ def create_fastapi_routes(backends, oauth, handle_authorize):
         if remote is None:
             raise HTTPException(404)
 
-        redirect_uri = request.url_for("auth", backend="google")
+        redirect_uri = request.url_for("auth", backend=backend)
         conf_key = "{}_AUTHORIZE_PARAMS".format(backend.upper())
         params = oauth.config.get(conf_key, default={})
         return await remote.authorize_redirect(request, redirect_uri, **params)
