@@ -76,6 +76,7 @@ Connections that Authlib Loginpass contains:
 - [x] Spotify
 - [x] Yandex
 - [x] Twitch
+- [x] Trello
 - [x] VK
 - [x] [Ory Hydra](https://www.ory.sh/docs/hydra/)
 
