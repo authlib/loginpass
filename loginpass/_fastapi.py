@@ -63,7 +63,7 @@ def create_fastapi_routes(backends, oauth, handle_authorize):
             token = await remote.authorize_access_token(request)
         else:
             # handle failed
-            return await handle_authorize(remote, None, None)
+            return await handle_authorize(remote, None, None, request)
         if "id_token" in token:
             user_info = await remote.parse_id_token(request, token)
         else:
