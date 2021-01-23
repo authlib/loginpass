@@ -29,7 +29,7 @@ def twitch_compliance_fix(session):
 
 
 def normalize_userinfo(client, data):
-    return map_profile_fields(data[0], {
+    return map_profile_fields(data['data'][0], {
         'sub': 'id',
         'name': 'display_name',
         'preferred_username': 'login',
