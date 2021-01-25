@@ -23,7 +23,7 @@ USERINFO_FIELDS = [
 USERINFO_ENDPOINT = 'me?fields=' + ','.join(USERINFO_FIELDS)
 
 
-def normalize_userinfo(client, data):
+async def normalize_userinfo(client, data):
     return map_profile_fields(data, {
         'sub': lambda o: str(o['id']),
         'name': 'name',
