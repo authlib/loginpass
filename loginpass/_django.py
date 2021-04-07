@@ -60,6 +60,7 @@ def create_auth_endpoint(remote, handle_authorize):
 
 
 def create_login_endpoint(remote, backend, auth_route_name):
+    from urllib.parse import urlencode
     from django.conf import settings
     from django.urls import reverse
 
@@ -72,6 +73,9 @@ def create_login_endpoint(remote, backend, auth_route_name):
 
     def login(request):
         redirect_uri = request.build_absolute_uri(reverse(auth_route_name))
+        if 'next' in request.GET:
+            redirect_uri += '?'+urlencode({'next': request.GET['next']})
+
         params = {}
         if authorize_params:
             params.update(authorize_params)
