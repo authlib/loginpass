@@ -74,6 +74,6 @@ def create_login_endpoint(remote, backend, auth_route_name):
         redirect_uri = request.build_absolute_uri(reverse(auth_route_name))
         params = {}
         if authorize_params:
-            params.udpate(authorize_params)
+            params.update(authorize_params)
         return remote.authorize_redirect(request, redirect_uri, **params)
     return login
