@@ -23,7 +23,7 @@ USERINFO_ENDPOINT = (
 )
 
 
-def normalize_userinfo(client, data):
+async def normalize_userinfo(client, data):
     return map_profile_fields(data['response'][0], {
         'sub': lambda o: str(o['id']),
         'name': _get_name,
