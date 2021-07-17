@@ -21,7 +21,7 @@ from loginpass import Twitter, GitHub, Google
 app = Flask(__name__)
 oauth = OAuth(app)
 
-def handle_authorize(remote, token, user_info):
+async def handle_authorize(remote, token, user_info):
     if token:
         save_token(remote.name, token)
     if user_info:
