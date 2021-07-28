@@ -22,6 +22,7 @@ from .spotify import Spotify
 from .yandex import Yandex
 from .twitch import Twitch
 from .vk import VK
+from .line import LINE
 from .orcid import ORCiD
 from .hydra import create_hydra_backend
 
@@ -50,6 +51,7 @@ __all__ = [
     'Yandex',
     'Twitch',
     'VK',
+    'LINE',
     'ORCiD',
     'create_hydra_backend',
 ]
