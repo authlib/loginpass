@@ -26,8 +26,8 @@ class GitHub(object):
         'userinfo_endpoint': 'https://api.github.com/user',
     }
 
-    def userinfo(self, **kwargs):
-        resp = self.get(self.OAUTH_CONFIG['userinfo_endpoint'], **kwargs)
+    async def userinfo(self, **kwargs):
+        resp = await self.get(self.OAUTH_CONFIG['userinfo_endpoint'], **kwargs)
         data = resp.json()
 
         params = {
@@ -45,9 +45,11 @@ class GitHub(object):
         # If that is the case we get all the users emails regardless if private or note
         # and use the one he/she has marked as `primary`
         if params.get('email') is None:
-            resp = self.get('user/emails', **kwargs)
+            resp = await self.get('user/emails', **kwargs)
             resp.raise_for_status()
             data = resp.json()
-            params["email"] = next(email['email'] for email in data if email['primary'])
+            params["email"], params["email_verified"] = next(
+                (email["email"], email["verified"]) for email in data if email["primary"]
+            )
 
         return UserInfo(params)
