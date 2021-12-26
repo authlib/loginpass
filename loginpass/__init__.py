@@ -24,6 +24,7 @@ from .twitch import Twitch
 from .vk import VK
 from .orcid import ORCiD
 from .hydra import create_hydra_backend
+from .mailru import MailRu
 
 
 __all__ = [
@@ -52,6 +53,7 @@ __all__ = [
     'VK',
     'ORCiD',
     'create_hydra_backend',
+    'MailRu',
 ]
 
 __version__ = version

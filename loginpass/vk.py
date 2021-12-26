@@ -19,7 +19,7 @@ from ._core import map_profile_fields
 
 USERINFO_ENDPOINT = (
     'users.get?fields=sex,bdate,has_photo,photo_max_orig,site,screen_name'
-    '&v=5.80'
+    '&v=5.131'
 )
 
 
