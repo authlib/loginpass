@@ -80,9 +80,9 @@ def create_flask_blueprint(backends, oauth, handle_authorize):
 
 
 def register_to(oauth, backend_cls):
-    from authlib.integrations.flask_client import FlaskRemoteApp
+    from authlib.integrations.flask_client import FlaskOAuth2App
 
-    class RemoteApp(backend_cls, FlaskRemoteApp):
+    class RemoteApp(backend_cls, FlaskOAuth2App):
         OAUTH_APP_CONFIG = backend_cls.OAUTH_CONFIG
 
     oauth.register(RemoteApp.NAME, overwrite=True, client_cls=RemoteApp)
