@@ -1,3 +1,4 @@
+from ._core import oauth_register_remote_app
 
 def create_flask_blueprint(backends, oauth, handle_authorize):
     """Create a Flask blueprint that you can register it directly to Flask
@@ -35,7 +36,7 @@ def create_flask_blueprint(backends, oauth, handle_authorize):
     from flask import Blueprint, request, url_for, current_app, abort
 
     for b in backends:
-        register_to(oauth, b)
+        oauth_register_remote_app(oauth, b)
 
     bp = Blueprint('loginpass', __name__)
 
@@ -77,12 +78,3 @@ def create_flask_blueprint(backends, oauth, handle_authorize):
         return remote.authorize_redirect(redirect_uri, **params)
 
     return bp
-
-
-def register_to(oauth, backend_cls):
-    from authlib.integrations.flask_client import FlaskOAuth2App
-
-    class RemoteApp(backend_cls, FlaskOAuth2App):
-        OAUTH_APP_CONFIG = backend_cls.OAUTH_CONFIG
-
-    oauth.register(RemoteApp.NAME, overwrite=True, client_cls=RemoteApp)

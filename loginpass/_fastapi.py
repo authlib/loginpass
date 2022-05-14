@@ -1,3 +1,4 @@
+from ._core import oauth_register_remote_app
 
 def create_fastapi_routes(backends, oauth, handle_authorize):
     """Create a Fastapi routes that you can register it directly to fastapi
@@ -38,7 +39,7 @@ def create_fastapi_routes(backends, oauth, handle_authorize):
     router = APIRouter()
 
     for b in backends:
-        register_to(oauth, b)
+        oauth_register_remote_app(oauth, b)
 
     @router.get("/auth/{backend}")
     async def auth(
@@ -83,12 +84,3 @@ def create_fastapi_routes(backends, oauth, handle_authorize):
         return await remote.authorize_redirect(request, redirect_uri, **params)
 
     return router
-
-
-def register_to(oauth, backend_cls):
-    from authlib.integrations.starlette_client import StarletteRemoteApp
-
-    class RemoteApp(backend_cls, StarletteRemoteApp):
-        OAUTH_APP_CONFIG = backend_cls.OAUTH_CONFIG
-
-    oauth.register(RemoteApp.NAME, overwrite=True, client_cls=RemoteApp)
