@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.urls import include, path
-from authlib.django.client import OAuth
+from authlib.integrations.django_client import OAuth
 from loginpass import create_django_urlpatterns
 from loginpass import Twitter, GitHub, Google
 

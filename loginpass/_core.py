@@ -20,3 +20,27 @@ def map_profile_fields(data, fields):
             profile[dst] = value
 
     return profile
+
+
+def oauth_register_remote_app(oauth, backend, **kwargs):
+    """Registers & returns an instance of a remote application for 
+    the given ``backend`` service.
+    
+    :param oauth: Authlib OAuth instance
+    :param backend: Backend class to register, e.g GitHub, Twitter etc
+    :param kwargs: Optional, additional, parameters for Authlib OAuth.register()
+    :return: Authlib OAuth remote app
+    """
+    client_cls = oauth.oauth2_client_cls
+    if backend.OAUTH_CONFIG.get('request_token_url'):
+        client_cls = oauth.oauth1_client_cls
+
+    class RemoteApp(backend, client_cls):
+        OAUTH_APP_CONFIG = backend.OAUTH_CONFIG
+    
+    return oauth.register(
+        RemoteApp.NAME,
+        overwrite=True,
+        client_cls=RemoteApp,
+        **kwargs
+    )
